@@ -1,13 +1,7 @@
-MOV R3, #10H
-MOV R4, #11H
-MOV A, R3
-CJNE A, R4, CHECK
-
-CHECK :
-    JNC DONE
-    MOV A, R4
-
-DONE :
-    RET
-
-END
+MOV R1, #05H
+LOOP 1:
+    MOV R2, #48H
+LOOP 2:
+    NOP
+    DJNZ R2, LOOP1
+    DJNZ R1, LOOP2

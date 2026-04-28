@@ -69,6 +69,12 @@ JZ {$label}
 
 等价于 `if (A==0) goto {$label};`
 
+3. `JNC` 是 *Jump if Not Zero in CY* 即 **不为0就跳转** ，即 `CY` 位为1就跳转 ，**常用于 `SUBB` `DJNE` `ADDC` 等涉及借位或者进位的操作比较**
+
+4. `JC` 即 *Jump if Zero* `CY`为0时跳转，同上
+
+
+
 ### 位条件跳转
 
 1. `JB` 是 *Jump if Bit Set* 即 **如果某位为1就跳转**，语法结构是：
@@ -105,7 +111,7 @@ JBC {$bit}, {$label}
 
 具体点比如 `P1` 寄存器的低2位（0-base）为0就跳转到`LOOP` ，并清除该位，即 `JBC P1.2, LOOP`
 
-这个实际上就是个 `if ((P1>>2)&1 == 0) {goto {$label}; P1 &= ~(1<<2);}`
+这个实际上就是个 `if ((P1>>2)&1 == 1) {goto {$label}; P1 &= ~(1<<2);}`
 
 
 ### 比较跳转
@@ -138,3 +144,40 @@ END
 ```
 
 2. **条件分支（寻找最大值）**
+
+```assembly
+MOV R3, #10H
+MOV R4, #11H
+MOV A, R3
+CJNE A, R4, CHECK
+
+CHECK :
+    JNC DONE
+    MOV A, R4
+
+DONE :
+    RET
+
+END
+```
+
+3. **精准延时（嵌套循环）**
+
+```assembly
+MOV R1, #05H; 外层计数器 = 5
+LOOP1:
+    MOV R2, #48H; 内层计数器=72 (这一步在外层循环内，但在内层循环外)
+LOOP2:
+    NOP; 延时
+    DJNZ R2, LOOP2; 内层循环 如果R2!=0，跳回LOOP2 (只减R2，不重置R2)
+    DJNZ R1, LOOP1; 外层循环 当内层R2跑完一圈后，R1减1，跳回LOOP1重新给R2赋值
+```
+
+假设 $t_0=1us$
+
+- 内层 (LOOP2)：NOP(1) + DJNZ(2) = $3\mu s$ ，总计：$72 \times 3 = 216\mu s$
+- 外层 (LOOP1)：MOV R2(1) + 内层耗时(216) + DJNZ R1(2) = $219\mu s$。
+
+总耗时：$5 \times 219 = 1095\mu s$
+
+    
