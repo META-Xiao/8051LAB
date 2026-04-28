@@ -1,0 +1,13 @@
+MOV R3, #10H
+MOV R4, #11H
+MOV A, R3
+CJNE A, R4, CHECK
+
+CHECK :
+    JNC DONE
+    MOV A, R4
+
+DONE :
+    RET
+
+END

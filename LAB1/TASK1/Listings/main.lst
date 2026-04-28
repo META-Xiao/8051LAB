@@ -1,0 +1,33 @@
+A51 MACRO ASSEMBLER  MAIN                                                                 04/27/2026 18:42:03 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\main.obj
+ASSEMBLER INVOKED BY: D:\keilv5\C51\BIN\A51.EXE main.a51 SET(SMALL) DEBUG PRINT(.\Listings\main.lst) OBJECT(.\Objects\ma
+                      in.obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+0000 A840              1     MOV R0, 40H ; MOV Rn Adress 
+0002 7950              2     MOV R1, #50H; MOV Rn Value , Val is Adress
+0004 E7                3     MOV A, @R1; pointer 
+0005 A203              4     MOV C, 03H; C=20H.3
+0007 B3                5     CPL C; C~=C
+0008 9290              6     MOV P1.0, C; 
+                       7     
+                       8     END
+A51 MACRO ASSEMBLER  MAIN                                                                 04/27/2026 18:42:03 PAGE     2
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+P1 . . . . . . . .  D ADDR   0090H   A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)
