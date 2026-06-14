@@ -1,0 +1,72 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              06/14/2026 21:17:50 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\keilv5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\lib) DEBUG OBJECTEXTEND PRINT(.
+                    -\Listings\main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "sysinit.h"
+   2          #include "uart.h"
+   3          #include "mpu6050.h"
+   4          #include "stdio.h"
+   5          #include "math.h"
+   6          
+   7          int   xdata AX, AY, AZ, GX, GY, GZ;
+   8          float xdata roll, pitch, yaw;
+   9          
+  10          static void delayMs(uint ms)
+  11          {
+  12   1          uchar j;
+  13   1          while (ms--) {
+  14   2              for (j = 0; j < 250; j++);
+  15   2          }
+  16   1      }
+  17          
+  18          static void initT2(void)
+  19          {
+  20   1          TMR2CN   = 0x04;
+  21   1          TMR2RLL  = 0xF9;
+  22   1          TMR2RLH  = 0x38;
+  23   1          TMR2L    = 0xF9;
+  24   1          TMR2H    = 0x38;
+  25   1          ET2      = 1;
+  26   1      }
+  27          
+  28          void main(void)
+  29          {
+  30   1          sysInit();
+  31   1          uartInit();
+  32   1          mpu6050Init();
+  33   1          initT2();
+  34   1      
+  35   1          while (1) {
+  36   2              printf("%d,%d,%d\r\n", (int)roll, (int)pitch, (int)yaw);
+  37   2              delayMs(30);
+  38   2          }
+  39   1      }
+  40          
+  41          void t2ISR() interrupt 5
+  42          {
+  43   1          TF2H = 0;
+  44   1          mpu6050ReadAll(&AX, &AY, &AZ, &GX, &GY, &GZ);
+  45   1          mpu6050Filter(AX, AY, AZ, GX, GY, GZ, &roll, &pitch, &yaw);
+  46   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    323    ----
+   CONSTANT SIZE    =     11    ----
+   XDATA SIZE       =     24    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+C51 COMPILER V9.60.7.0   MAIN                                                              06/14/2026 21:17:50 PAGE 2   
+
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,6 @@
+".\Objects\main.obj",
+".\Objects\mpu6050.obj",
+".\Objects\sysinit.obj",
+".\Objects\uart.obj" 
+TO ".\Objects\mpu" 
+PRINT(".\Listings\mpu.m51") RAMSIZE(256) 

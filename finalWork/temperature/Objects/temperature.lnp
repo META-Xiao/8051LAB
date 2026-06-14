@@ -1,0 +1,9 @@
+".\Objects\main.obj",
+".\Objects\buzzer.obj",
+".\Objects\ds18b20.obj",
+".\Objects\segdisplay.obj",
+".\Objects\sysinit.obj",
+".\Objects\uart.obj",
+".\Objects\ultrasonic.obj" 
+TO ".\Objects\temperature" 
+PRINT(".\Listings\temperature.m51") RAMSIZE(256) 

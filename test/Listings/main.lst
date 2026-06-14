@@ -1,0 +1,332 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              06/14/2026 20:57:17 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\keilv5\C51\BIN\C51.EXE main.c OPTIMIZE(7,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main.
+                    -lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "C8051F410.h"
+   2          #include <math.h>
+   3          #include <stdio.h>
+   4          #include <stdarg.h>
+   5          #include <string.h>
+   6          
+   7          unsigned char sendata[]={"0000,0000,0000\r\n"};
+   8          unsigned char i;
+   9          unsigned char j;
+  10          unsigned char counter=0;
+  11          sbit I2C_SCL = P0^3;
+  12          sbit I2C_SDA = P0^2;
+  13          
+  14          int xdata AX, AY, AZ, GX, GY, GZ;
+  15          float xdata AngleAccXZ=0, AngleGyroXZ=0, AngleXZ=0;
+  16          float xdata AngleAccYZ=0, AngleGyroYZ=0, AngleYZ=0;
+  17          float xdata AngleAccYX=0, AngleGyroYX=0, AngleYX=0;
+  18          float xdata a, b, c;
+  19          float xdata Alpha=0.001;
+  20          
+  21          void PCA_Init()
+  22          {
+  23   1          PCA0MD &= ~0x40;
+  24   1          PCA0MD  = 0x00;
+  25   1      }
+  26          
+  27          void Timer_Init()
+  28          {
+  29   1          TCON      = 0x40;
+  30   1          TMOD      = 0x20;
+  31   1          CKCON     = 0x08;
+  32   1          TH1       = 0x96;
+  33   1          TMR2CN    = 0x04;
+  34   1          TMR2RLL   = 0xF9;
+  35   1          TMR2RLH   = 0x38;
+  36   1          TMR2L     = 0xF9;
+  37   1          TMR2H     = 0x38;
+  38   1      }
+  39          
+  40          void UART_Init()
+  41          {
+  42   1          SCON0     = 0x10;
+  43   1      }
+  44          
+  45          void Port_IO_Init()
+  46          {
+  47   1          XBR0      = 0x01;
+  48   1          XBR1      = 0x40;
+  49   1      }
+  50          
+  51          void Oscillator_Init()
+  52          {
+  53   1          OSCICN    = 0x87;
+  54   1      }
+C51 COMPILER V9.60.7.0   MAIN                                                              06/14/2026 20:57:17 PAGE 2   
+
+  55          
+  56          void Interrupts_Init()
+  57          {
+  58   1          IE        = 0xA0;
+  59   1      }
+  60          
+  61          void Init_Device(void)
+  62          {
+  63   1          PCA_Init();
+  64   1          Timer_Init();
+  65   1          UART_Init();
+  66   1          Port_IO_Init();
+  67   1          Oscillator_Init();
+  68   1          Interrupts_Init();
+  69   1      }
+  70          
+  71          //I2C??
+  72          void I2C_Delay(void)
+  73          {
+  74   1          unsigned char i;
+  75   1          for (i = 0; i < 30; i++) {}
+  76   1      }
+  77          
+  78          void I2C_Init(void)
+  79          {
+  80   1          P0MDOUT |= 0x08;
+  81   1          P0MDOUT &= ~0x04;
+  82   1          P0MDIN  |= 0x0C;
+  83   1        
+  84   1          I2C_SCL = 1;
+  85   1          I2C_SDA = 1;
+  86   1      }
+  87          
+  88          void I2C_Start(void)
+  89          {
+  90   1          I2C_SDA = 1;
+  91   1          I2C_SCL = 1;
+  92   1          I2C_Delay();
+  93   1          I2C_SDA = 0;
+  94   1          I2C_Delay();
+  95   1          I2C_SCL = 0;
+  96   1      }
+  97          
+  98          void I2C_Stop(void)
+  99          {
+ 100   1          I2C_SDA = 0;
+ 101   1          I2C_SCL = 1;
+ 102   1          I2C_Delay();
+ 103   1          I2C_SDA = 1;
+ 104   1          I2C_Delay();
+ 105   1      }
+ 106          
+ 107          void I2C_SendByte(unsigned char dat)
+ 108          {
+ 109   1          unsigned char i;
+ 110   1          for (i = 0; i < 8; i++) {
+ 111   2              I2C_SDA = (dat & (0x80 >> i)) ? 1 : 0;
+ 112   2              I2C_Delay();
+ 113   2              I2C_SCL = 1;
+ 114   2              I2C_Delay();
+ 115   2              I2C_SCL = 0;
+ 116   2          }
+C51 COMPILER V9.60.7.0   MAIN                                                              06/14/2026 20:57:17 PAGE 3   
+
+ 117   1      }
+ 118          
+ 119          unsigned char I2C_ReceiveByte(void)
+ 120          {
+ 121   1          unsigned char i, dat = 0x00;
+ 122   1          I2C_SDA = 1;
+ 123   1          for (i = 0; i < 8; i++) {
+ 124   2              I2C_SCL = 1;
+ 125   2              I2C_Delay();
+ 126   2              if (I2C_SDA == 1) {
+ 127   3                  dat |= (0x80 >> i);
+ 128   3              }
+ 129   2              I2C_SCL = 0;
+ 130   2              I2C_Delay();
+ 131   2          }
+ 132   1          return dat;
+ 133   1      }
+ 134          
+ 135          void I2C_SendAck(unsigned char ack)
+ 136          {
+ 137   1          I2C_SDA = ack ? 1 : 0;
+ 138   1          I2C_Delay();
+ 139   1          I2C_SCL = 1;
+ 140   1          I2C_Delay();
+ 141   1          I2C_SCL = 0;
+ 142   1      }
+ 143          
+ 144          unsigned char I2C_ReceiveAck(void)
+ 145          {
+ 146   1          unsigned char ack;
+ 147   1          I2C_SDA = 1;
+ 148   1          I2C_Delay();
+ 149   1          I2C_SCL = 1;
+ 150   1          I2C_Delay();
+ 151   1          ack = I2C_SDA;
+ 152   1          I2C_SCL = 0;
+ 153   1          I2C_Delay();
+ 154   1          return ack;
+ 155   1      }
+ 156          
+ 157          #define MPU6050_SMPLRT_DIV      0x19
+ 158          #define MPU6050_CONFIG          0x1A
+ 159          #define MPU6050_GYRO_CONFIG     0x1B
+ 160          #define MPU6050_ACCEL_CONFIG    0x1C
+ 161          #define MPU6050_ACCEL_XOUT_H    0x3B
+ 162          #define MPU6050_ACCEL_XOUT_L    0x3C
+ 163          #define MPU6050_ACCEL_YOUT_H    0x3D
+ 164          #define MPU6050_ACCEL_YOUT_L    0x3E
+ 165          #define MPU6050_ACCEL_ZOUT_H    0x3F
+ 166          #define MPU6050_ACCEL_ZOUT_L    0x40
+ 167          #define MPU6050_TEMP_OUT_H      0x41
+ 168          #define MPU6050_TEMP_OUT_L      0x42
+ 169          #define MPU6050_GYRO_XOUT_H     0x43
+ 170          #define MPU6050_GYRO_XOUT_L     0x44
+ 171          #define MPU6050_GYRO_YOUT_H     0x45
+ 172          #define MPU6050_GYRO_YOUT_L     0x46
+ 173          #define MPU6050_GYRO_ZOUT_H     0x47
+ 174          #define MPU6050_GYRO_ZOUT_L     0x48
+ 175          #define MPU6050_PWR_MGMT_1      0x6B
+ 176          #define MPU6050_PWR_MGMT_2      0x6C
+ 177          #define MPU6050_WHO_AM_I        0x75
+ 178          #define MPU6050_ADDRESS         0xD0
+C51 COMPILER V9.60.7.0   MAIN                                                              06/14/2026 20:57:17 PAGE 4   
+
+ 179          
+ 180          void MPU6050_WriteReg(unsigned char RegAddress, unsigned char Data)
+ 181          {
+ 182   1          I2C_Start();
+ 183   1          I2C_SendByte(MPU6050_ADDRESS);
+ 184   1          I2C_ReceiveAck();
+ 185   1          I2C_SendByte(RegAddress);
+ 186   1          I2C_ReceiveAck();
+ 187   1          I2C_SendByte(Data);
+ 188   1          I2C_ReceiveAck();
+ 189   1          I2C_Stop();
+ 190   1      }
+ 191          
+ 192          void MPU6050_ReadRegs(unsigned char RegAddress, unsigned char *DataArray, unsigned char Count)
+ 193          {
+ 194   1          unsigned char i;
+ 195   1      
+ 196   1          I2C_Start();
+ 197   1          I2C_SendByte(MPU6050_ADDRESS);
+ 198   1          I2C_ReceiveAck();
+ 199   1          I2C_SendByte(RegAddress);
+ 200   1          I2C_ReceiveAck();
+ 201   1      
+ 202   1          I2C_Start();
+ 203   1          I2C_SendByte(MPU6050_ADDRESS | 0x01);
+ 204   1          I2C_ReceiveAck();
+ 205   1          for (i = 0; i < Count; i++) {
+ 206   2              DataArray[i] = I2C_ReceiveByte();
+ 207   2              if (i < Count - 1) {
+ 208   3                  I2C_SendAck(0);
+ 209   3              } else {
+ 210   3                  I2C_SendAck(1);
+ 211   3              }
+ 212   2          }
+ 213   1          I2C_Stop();
+ 214   1      }
+ 215          
+ 216          void MPU6050_Init(void)
+ 217          {
+ 218   1          I2C_Init();
+ 219   1          MPU6050_WriteReg(MPU6050_PWR_MGMT_1, 0x01);
+ 220   1          MPU6050_WriteReg(MPU6050_PWR_MGMT_2, 0x00);
+ 221   1          MPU6050_WriteReg(MPU6050_SMPLRT_DIV, 0x09);
+ 222   1          MPU6050_WriteReg(MPU6050_CONFIG, 0x06);
+ 223   1          MPU6050_WriteReg(MPU6050_GYRO_CONFIG, 0x18);
+ 224   1          MPU6050_WriteReg(MPU6050_ACCEL_CONFIG, 0x18);
+ 225   1      }
+ 226          
+ 227          void MPU6050_GetData(int *AccX, int *AccY, int *AccZ, int *GyroX, int *GyroY, int *GyroZ)
+ 228          {
+ 229   1          static xdata unsigned char Data[14];
+ 230   1      
+ 231   1          MPU6050_ReadRegs(MPU6050_ACCEL_XOUT_H, Data, 14);
+ 232   1      
+ 233   1          *AccX  = ((int)Data[0]  << 8) | Data[1];
+ 234   1          *AccY  = ((int)Data[2]  << 8) | Data[3];
+ 235   1          *AccZ  = ((int)Data[4]  << 8) | Data[5];
+ 236   1          *GyroX = ((int)Data[8]  << 8) | Data[9];
+ 237   1          *GyroY = ((int)Data[10] << 8) | Data[11];
+ 238   1          *GyroZ = ((int)Data[12] << 8) | Data[13];
+ 239   1      }
+ 240          
+C51 COMPILER V9.60.7.0   MAIN                                                              06/14/2026 20:57:17 PAGE 5   
+
+ 241          void Serial_SendString(char *String)
+ 242          {
+ 243   1        for (j = 0; String[j] != '\0'; j++)
+ 244   1        {
+ 245   2          TI0 = 0;
+ 246   2          SBUF0 = String[j];
+ 247   2          while(TI0 != 1);
+ 248   2        }
+ 249   1      }
+ 250          
+ 251          void Serial_Printf(char *format, ...)
+ 252          {
+ 253   1        char String[16];
+ 254   1        va_list arg;
+ 255   1        va_start(arg, format);
+ 256   1        vsprintf(String, format, arg);
+ 257   1        va_end(arg);
+ 258   1        Serial_SendString(String);
+ 259   1      }
+ 260          
+ 261          void main()
+ 262          {
+ 263   1         Init_Device();
+ 264   1         MPU6050_Init();
+ 265   1        
+ 266   1         while(1)
+ 267   1         {
+ 268   2           Serial_Printf("%d,%d,%d\r\n",(int)a,(int)b,(int)c);
+ 269   2         }
+ 270   1      }
+ 271          
+ 272          void t2int02() interrupt 5
+ 273          {
+ 274   1        TF2H =0;
+ 275   1        
+ 276   1        MPU6050_GetData(&AX, &AY, &AZ, &GX, &GY, &GZ);
+ 277   1        
+ 278   1        GX += 19;
+ 279   1        GY += 43;
+ 280   1        GZ += 13;
+ 281   1      
+ 282   1        AngleAccXZ  = -atan2(AX, AZ) / 3.1415926 * 180.0;
+ 283   1        AngleGyroXZ = AngleXZ + (float)GY / 32768.0 * 2000.0 * 0.025;
+ 284   1        AngleXZ     = (Alpha * AngleAccXZ) + ((1.0 - Alpha) * AngleGyroXZ);
+ 285   1      
+ 286   1        AngleAccYZ  = -atan2(AY, AZ) / 3.1415926 * 180.0;
+ 287   1        AngleGyroYZ = AngleYZ + (float)GX / 32768.0 * 2000.0 * 0.025;
+ 288   1        AngleYZ     = (Alpha * AngleAccYZ) + ((1.0 - Alpha) * AngleGyroYZ);
+ 289   1      
+ 290   1        AngleAccYX  = -atan2(AY, AX) / 3.1415926 * 180.0;
+ 291   1        AngleGyroYX = AngleYX + (float)GZ / 32768.0 * 2000.0 * 0.025;
+ 292   1        AngleYX     = (Alpha * AngleAccYX) + ((1.0 - Alpha) * AngleGyroYX); 
+ 293   1          
+ 294   1        a = AngleXZ;
+ 295   1        b = AngleYZ;
+ 296   1        c = AngleGyroYX;
+ 297   1      }
+ 298          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1673    ----
+C51 COMPILER V9.60.7.0   MAIN                                                              06/14/2026 20:57:17 PAGE 6   
+
+   CONSTANT SIZE    =     11    ----
+   XDATA SIZE       =     78    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     20      63
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
