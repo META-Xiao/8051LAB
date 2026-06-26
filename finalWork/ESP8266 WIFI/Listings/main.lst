@@ -1,0 +1,106 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              06/26/2026 16:04:00 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\keilv5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\lib) DEBUG OBJECTEXTEND PRINT(.
+                    -\Listings\main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          /*
+   2             ESP8266 WIFI + DS18B20 温度透传
+   3             ESP8266: VCC-5V  GND-GND  RXD-P0.4  TXD-P0.5  RST-P0.7
+   4             DS18B20: DQ-P0.2  VCC/GND-3.3V/GND
+   5          */
+   6          #include "sysinit.h"
+   7          #include "esp8266.h"
+   8          #include "ds18b20.h"
+   9          #include "stdio.h"
+  10          
+  11          #define WIFI_SSID      "YourWiFiName"
+  12          #define WIFI_PWD       "YourWiFiPassword"
+  13          #define SERVER_IP      "192.168.1.100"
+  14          #define SERVER_PORT    8080
+  15          #define SEND_INTERVAL  3000
+  16          
+  17          static void delayMs(uint ms)
+  18          {
+  19   1          uchar j;
+  20   1          while (ms--) {
+  21   2              for (j = 0; j < 250; j++);
+  22   2          }
+  23   1      }
+  24          
+  25          void main(void)
+  26          {
+  27   1          uint temp;
+  28   1          uint lastTemp = 0xFFFF;
+  29   1          uint sendCount = 0;
+  30   1          uchar ret;
+  31   1          WiFiConfig xdata cfg;
+  32   1      
+  33   1          sysInit();
+  34   1          ds18b20Init();
+  35   1          esp8266Init(115200);
+  36   1          delayMs(1000);
+  37   1      
+  38   1          printf("\r\n=== ESP8266 WiFi + DS18B20 ===\r\n");
+  39   1      
+  40   1          printf("AT test...\r\n");
+  41   1          ret = esp8266TestAT();
+  42   1          if (!ret) {
+  43   2              printf("AT FAIL! Hardware reset...\r\n");
+  44   2              esp8266HardReset();
+  45   2              ret = esp8266TestAT();
+  46   2              if (!ret) {
+  47   3                  printf("No response from ESP8266. Halted.\r\n");
+  48   3                  while (1);
+  49   3              }
+  50   2          }
+  51   1          printf("AT OK\r\n");
+  52   1      
+  53   1          cfg.ssid       = WIFI_SSID;
+  54   1          cfg.password   = WIFI_PWD;
+C51 COMPILER V9.60.7.0   MAIN                                                              06/26/2026 16:04:00 PAGE 2   
+
+  55   1          cfg.serverIP   = SERVER_IP;
+  56   1          cfg.serverPort = SERVER_PORT;
+  57   1      
+  58   1          printf("WiFi: %s\r\n", WIFI_SSID);
+  59   1          printf("Server: %s:%d\r\n", SERVER_IP, SERVER_PORT);
+  60   1      
+  61   1          ret = esp8266Config(&cfg);
+  62   1          if (!ret) {
+  63   2              printf("WiFi config FAILED!\r\n");
+  64   2              while (1);
+  65   2          }
+  66   1          printf("=== Transparent Mode ON ===\r\n\r\n");
+  67   1      
+  68   1          while (1) {
+  69   2              ds18b20Start();
+  70   2              delayMs(800);
+  71   2              temp = ds18b20Read();
+  72   2      
+  73   2              if (temp != lastTemp || sendCount % 10 == 0) {
+  74   3                  printf("{\"t\":%u.%02u}\r\n", temp / 100, temp % 100);
+  75   3                  lastTemp = temp;
+  76   3              }
+  77   2              sendCount++;
+  78   2              delayMs(SEND_INTERVAL - 800);
+  79   2          }
+  80   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    352    ----
+   CONSTANT SIZE    =    262    ----
+   XDATA SIZE       =   ----      11
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       7
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

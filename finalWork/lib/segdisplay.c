@@ -143,7 +143,7 @@ void segDelayMs(uint ms)
 {
     uchar j;
     while (ms--) {
-        for (j = 0; j < 250; j++) {
+					for (j = 0; j < 250; j++) {
             _nop_();
         }
     }

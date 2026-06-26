@@ -1,0 +1,376 @@
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                    06/26/2026  21:07:30  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22.4.0, INVOKED BY:
+D:\KEILV5\C51\BIN\BL51.EXE .\Objects\main.obj, .\Objects\dac.obj, .\Objects\sysinit.obj, .\Objects\uart.obj TO .\Objects
+>> \Sawtooth PRINT (.\Listings\Sawtooth.m51) RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\main.obj (MAIN)
+  .\Objects\dac.obj (DAC)
+  .\Objects\sysinit.obj (SYSINIT)
+  .\Objects\uart.obj (UART)
+  D:\KEILV5\C51\LIB\C51S.LIB (?C_STARTUP)
+  D:\KEILV5\C51\LIB\C51S.LIB (?C?LMUL)
+  D:\KEILV5\C51\LIB\C51S.LIB (?C?ULDIV)
+  D:\KEILV5\C51\LIB\C51S.LIB (?C?ULCMP)
+  D:\KEILV5\C51\LIB\C51S.LIB (PRINTF)
+  D:\KEILV5\C51\LIB\C51S.LIB (?C_INIT)
+  D:\KEILV5\C51\LIB\C51S.LIB (?C?CLDPTR)
+  D:\KEILV5\C51\LIB\C51S.LIB (?C?CLDOPTR)
+  D:\KEILV5\C51\LIB\C51S.LIB (?C?CSTPTR)
+  D:\KEILV5\C51\LIB\C51S.LIB (?C?PLDIIDATA)
+  D:\KEILV5\C51\LIB\C51S.LIB (?C?CCASE)
+
+
+LINK MAP OF MODULE:  .\Objects\Sawtooth (MAIN)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0016H     UNIT         _DATA_GROUP_
+                    001EH     0002H                  *** GAP ***
+            BIT     0020H.0   0001H.1   UNIT         _BIT_GROUP_
+                    0021H.1   0000H.7                *** GAP ***
+            DATA    0022H     0004H     UNIT         ?DT?UART
+            IDATA   0026H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     035CH     UNIT         ?PR?PRINTF?PRINTF
+            CODE    035FH     0200H     UNIT         ?CO?DAC
+            CODE    055FH     01BCH     UNIT         ?C?LIB_CODE
+            CODE    071BH     00D3H     UNIT         ?PR?_UARTINITBAUD?UART
+            CODE    07EEH     008CH     UNIT         ?C_C51STARTUP
+            CODE    087AH     002FH     UNIT         ?PR?MAIN?MAIN
+            CODE    08A9H     001AH     UNIT         ?CO?MAIN
+            CODE    08C3H     000FH     UNIT         ?PR?SYSINIT?SYSINIT
+            CODE    08D2H     000DH     UNIT         ?PR?DACINIT?DAC
+            CODE    08DFH     000BH     UNIT         ?PR?UARTINIT?UART
+            CODE    08EAH     0008H     UNIT         ?PR?_PUTCHAR?UART
+            CODE    08F2H     0007H     UNIT         ?PR?SYSPCAINIT?SYSINIT
+            CODE    08F9H     0007H     UNIT         ?PR?SYSTIMERINIT?SYSINIT
+            CODE    0900H     0007H     UNIT         ?C_INITSEG
+            CODE    0907H     0005H     UNIT         ?PR?_DACSET?DAC
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/26/2026  21:07:30  PAGE 2
+
+
+            CODE    090CH     0004H     UNIT         ?PR?SYSPORTINIT?SYSINIT
+            CODE    0910H     0004H     UNIT         ?PR?SYSOSCINIT?SYSINIT
+            CODE    0914H     0004H     UNIT         ?PR?SYSINTINIT?SYSINIT
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\Sawtooth (MAIN)
+
+
+SEGMENT                             BIT_GROUP          DATA_GROUP 
+  +--> CALLED SEGMENT            START    LENGTH     START    LENGTH
+--------------------------------------------------------------------
+?C_C51STARTUP                    -----    -----      -----    -----
+  +--> ?PR?MAIN?MAIN
+  +--> ?C_INITSEG
+
+?PR?MAIN?MAIN                    -----    -----      0008H    0002H
+  +--> ?PR?SYSINIT?SYSINIT
+  +--> ?PR?UARTINIT?UART
+  +--> ?PR?DACINIT?DAC
+  +--> ?CO?MAIN
+  +--> ?PR?PRINTF?PRINTF
+  +--> ?PR?_DACSET?DAC
+
+?PR?SYSINIT?SYSINIT              -----    -----      -----    -----
+  +--> ?PR?SYSPCAINIT?SYSINIT
+  +--> ?PR?SYSTIMERINIT?SYSINIT
+  +--> ?PR?SYSPORTINIT?SYSINIT
+  +--> ?PR?SYSOSCINIT?SYSINIT
+  +--> ?PR?SYSINTINIT?SYSINIT
+
+?PR?UARTINIT?UART                -----    -----      -----    -----
+  +--> ?PR?_UARTINITBAUD?UART
+
+?PR?_UARTINITBAUD?UART           -----    -----      000AH    0009H
+
+?PR?PRINTF?PRINTF                0020H.0  0001H.1    000AH    0014H
+  +--> ?PR?_PUTCHAR?UART
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\Sawtooth (MAIN)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        MAIN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:00E8H         PUBLIC        ADC0CN
+  D:00A8H         PUBLIC        IE
+  D:00D8H         PUBLIC        PCA0CN
+  D:00B8H         PUBLIC        IP
+  D:00C0H         PUBLIC        SMB0CN
+  C:087AH         PUBLIC        main
+  D:00F8H         PUBLIC        SPI0CN
+  D:0088H         PUBLIC        TCON
+  D:00C8H         PUBLIC        TMR2CN
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/26/2026  21:07:30  PAGE 3
+
+
+  D:0098H         PUBLIC        SCON0
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          MAIN
+  -------         DO            
+  D:0008H         SYMBOL        i
+  -------         ENDDO         
+  C:087AH         LINE#         8
+  C:087AH         LINE#         9
+  C:087AH         LINE#         12
+  C:087DH         LINE#         13
+  C:0880H         LINE#         14
+  C:0883H         LINE#         16
+  C:088CH         LINE#         18
+  C:088CH         LINE#         19
+  C:0891H         LINE#         20
+  C:0898H         LINE#         21
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        MAIN
+
+  -------         MODULE        DAC
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0096H         PUBLIC        IDA0
+  D:00E8H         PUBLIC        ADC0CN
+  D:00A8H         PUBLIC        IE
+  D:00B9H         PUBLIC        IDA0CN
+  D:00D8H         PUBLIC        PCA0CN
+  D:00B8H         PUBLIC        IP
+  D:00D1H         PUBLIC        REF0CN
+  D:00C0H         PUBLIC        SMB0CN
+  C:035FH         PUBLIC        dacSineTable
+  D:00F1H         PUBLIC        P0MDIN
+  D:00F8H         PUBLIC        SPI0CN
+  D:0088H         PUBLIC        TCON
+  D:00C8H         PUBLIC        TMR2CN
+  D:00D4H         PUBLIC        P0SKIP
+  C:08D2H         PUBLIC        dacInit
+  C:0907H         PUBLIC        _dacSet
+  D:0098H         PUBLIC        SCON0
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          DACINIT
+  C:08D2H         LINE#         40
+  C:08D2H         LINE#         41
+  C:08D2H         LINE#         42
+  C:08D5H         LINE#         43
+  C:08D8H         LINE#         44
+  C:08DBH         LINE#         45
+  C:08DEH         LINE#         46
+  -------         ENDPROC       DACINIT
+  -------         PROC          _DACSET
+  D:0006H         SYMBOL        value
+  C:0907H         LINE#         48
+  C:0907H         LINE#         49
+  C:0907H         LINE#         50
+  C:090BH         LINE#         51
+  -------         ENDPROC       _DACSET
+  -------         ENDMOD        DAC
+
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/26/2026  21:07:30  PAGE 4
+
+
+  -------         MODULE        SYSINIT
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:00E8H         PUBLIC        ADC0CN
+  C:08F2H         PUBLIC        sysPcaInit
+  D:00A8H         PUBLIC        IE
+  D:00D9H         PUBLIC        PCA0MD
+  D:00D8H         PUBLIC        PCA0CN
+  D:00B8H         PUBLIC        IP
+  D:00E2H         PUBLIC        XBR1
+  C:0910H         PUBLIC        sysOscInit
+  C:090CH         PUBLIC        sysPortInit
+  C:0914H         PUBLIC        sysIntInit
+  D:00C0H         PUBLIC        SMB0CN
+  D:00F8H         PUBLIC        SPI0CN
+  D:0089H         PUBLIC        TMOD
+  D:0088H         PUBLIC        TCON
+  D:00C8H         PUBLIC        TMR2CN
+  D:00B2H         PUBLIC        OSCICN
+  D:0098H         PUBLIC        SCON0
+  C:08C3H         PUBLIC        sysInit
+  D:00D0H         PUBLIC        PSW
+  C:08F9H         PUBLIC        sysTimerInit
+  -------         PROC          SYSPCAINIT
+  C:08F2H         LINE#         3
+  C:08F2H         LINE#         4
+  C:08F2H         LINE#         5
+  C:08F5H         LINE#         6
+  C:08F8H         LINE#         7
+  -------         ENDPROC       SYSPCAINIT
+  -------         PROC          SYSTIMERINIT
+  C:08F9H         LINE#         9
+  C:08F9H         LINE#         10
+  C:08F9H         LINE#         11
+  C:08FCH         LINE#         12
+  C:08FFH         LINE#         13
+  -------         ENDPROC       SYSTIMERINIT
+  -------         PROC          SYSPORTINIT
+  C:090CH         LINE#         15
+  C:090CH         LINE#         16
+  C:090CH         LINE#         17
+  C:090FH         LINE#         18
+  -------         ENDPROC       SYSPORTINIT
+  -------         PROC          SYSOSCINIT
+  C:0910H         LINE#         20
+  C:0910H         LINE#         21
+  C:0910H         LINE#         22
+  C:0913H         LINE#         23
+  -------         ENDPROC       SYSOSCINIT
+  -------         PROC          SYSINTINIT
+  C:0914H         LINE#         25
+  C:0914H         LINE#         26
+  C:0914H         LINE#         27
+  C:0917H         LINE#         28
+  -------         ENDPROC       SYSINTINIT
+  -------         PROC          SYSINIT
+  C:08C3H         LINE#         30
+  C:08C3H         LINE#         31
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/26/2026  21:07:30  PAGE 5
+
+
+  C:08C3H         LINE#         32
+  C:08C6H         LINE#         33
+  C:08C9H         LINE#         34
+  C:08CCH         LINE#         35
+  C:08CFH         LINE#         36
+  -------         ENDPROC       SYSINIT
+  -------         ENDMOD        SYSINIT
+
+  -------         MODULE        UART
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:00E8H         PUBLIC        ADC0CN
+  D:00A8H         PUBLIC        IE
+  D:00D8H         PUBLIC        PCA0CN
+  D:00B8H         PUBLIC        IP
+  D:00E1H         PUBLIC        XBR0
+  D:00E2H         PUBLIC        XBR1
+  D:00C0H         PUBLIC        SMB0CN
+  D:00F8H         PUBLIC        SPI0CN
+  D:0089H         PUBLIC        TMOD
+  D:0088H         PUBLIC        TCON
+  D:00C8H         PUBLIC        TMR2CN
+  B:0098H.1       PUBLIC        TI0
+  D:008DH         PUBLIC        TH1
+  C:071BH         PUBLIC        _uartInitBaud
+  C:08DFH         PUBLIC        uartInit
+  B:0088H.6       PUBLIC        TR1
+  D:0099H         PUBLIC        SBUF0
+  D:0098H         PUBLIC        SCON0
+  D:008EH         PUBLIC        CKCON
+  D:00D0H         PUBLIC        PSW
+  C:08EAH         PUBLIC        _putchar
+  D:0022H         SYMBOL        sysClk
+  -------         PROC          UARTINIT
+  C:08DFH         LINE#         9
+  C:08DFH         LINE#         10
+  C:08DFH         LINE#         11
+  -------         ENDPROC       UARTINIT
+  -------         PROC          _UARTINITBAUD
+  D:000AH         SYMBOL        baud
+  -------         DO            
+  D:000EH         SYMBOL        divisor
+  D:0012H         SYMBOL        reload
+  -------         ENDDO         
+  C:071BH         LINE#         14
+  C:0723H         LINE#         15
+  C:0723H         LINE#         19
+  C:0726H         LINE#         20
+  C:0729H         LINE#         22
+  C:0731H         LINE#         24
+  C:075DH         LINE#         25
+  C:077EH         LINE#         26
+  C:0781H         LINE#         27
+  C:0781H         LINE#         28
+  C:0783H         LINE#         29
+  C:0786H         LINE#         30
+  C:07B2H         LINE#         31
+  C:07D3H         LINE#         32
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/26/2026  21:07:30  PAGE 6
+
+
+  C:07DDH         LINE#         33
+  C:07DDH         LINE#         34
+  C:07E3H         LINE#         35
+  C:07E3H         LINE#         37
+  C:07E6H         LINE#         38
+  C:07E9H         LINE#         39
+  C:07EBH         LINE#         40
+  C:07EDH         LINE#         41
+  -------         ENDPROC       _UARTINITBAUD
+  -------         PROC          _PUTCHAR
+  D:0007H         SYMBOL        c
+  C:08EAH         LINE#         43
+  C:08EAH         LINE#         44
+  C:08EAH         LINE#         45
+  C:08EDH         LINE#         46
+  C:08EFH         LINE#         47
+  C:08F1H         LINE#         48
+  C:08F1H         LINE#         49
+  -------         ENDPROC       _PUTCHAR
+  -------         ENDMOD        UART
+
+  -------         MODULE        ?C?LMUL
+  C:055FH         PUBLIC        ?C?LMUL
+  -------         ENDMOD        ?C?LMUL
+
+  -------         MODULE        ?C?ULDIV
+  C:05EAH         PUBLIC        ?C?ULDIV
+  -------         ENDMOD        ?C?ULDIV
+
+  -------         MODULE        ?C?ULCMP
+  C:067CH         PUBLIC        ?C?ULCMP
+  -------         ENDMOD        ?C?ULCMP
+
+  -------         MODULE        PRINTF
+  D:000AH         PUBLIC        ?_PRINTF517?BYTE
+  D:000AH         PUBLIC        ?_PRINTF?BYTE
+  D:000AH         PUBLIC        ?_SPRINTF517?BYTE
+  D:000AH         PUBLIC        ?_SPRINTF?BYTE
+  C:0065H         PUBLIC        _PRINTF
+  C:0065H         PUBLIC        _PRINTF517
+  C:005FH         PUBLIC        _SPRINTF
+  C:005FH         PUBLIC        _SPRINTF517
+  -------         ENDMOD        PRINTF
+
+  -------         MODULE        ?C?CLDPTR
+  C:068DH         PUBLIC        ?C?CLDPTR
+  -------         ENDMOD        ?C?CLDPTR
+
+  -------         MODULE        ?C?CLDOPTR
+  C:06A6H         PUBLIC        ?C?CLDOPTR
+  -------         ENDMOD        ?C?CLDOPTR
+
+  -------         MODULE        ?C?CSTPTR
+  C:06D3H         PUBLIC        ?C?CSTPTR
+  -------         ENDMOD        ?C?CSTPTR
+
+  -------         MODULE        ?C?PLDIIDATA
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/26/2026  21:07:30  PAGE 7
+
+
+  C:06E5H         PUBLIC        ?C?PLDIIDATA
+  -------         ENDMOD        ?C?PLDIIDATA
+
+  -------         MODULE        ?C?CCASE
+  C:06F5H         PUBLIC        ?C?CCASE
+  -------         ENDMOD        ?C?CCASE
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?CO?DAC
+
+Program Size: data=36.1 xdata=0 code=2328
+LINK/LOCATE RUN COMPLETE.  1 WARNING(S),  0 ERROR(S)

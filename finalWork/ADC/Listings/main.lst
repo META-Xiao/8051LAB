@@ -1,0 +1,63 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              06/26/2026 19:56:55 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\keilv5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\lib) DEBUG OBJECTEXTEND PRINT(.
+                    -\Listings\main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          /* 片内ADC数字电压表
+   2             模拟输入: P0.2, 量程 0-2.5V */
+   3          #include "sysinit.h"
+   4          #include "uart.h"
+   5          #include "adc.h"
+   6          #include "segdisplay.h"
+   7          #include "stdio.h"
+   8          
+   9          void main(void)
+  10          {
+  11   1          uint adcVal, mV;
+  12   1          uint lastAdc = 0xFFFF;
+  13   1          uchar i;
+  14   1      
+  15   1          sysInit();
+  16   1          uartInit();
+  17   1          adcInit();
+  18   1          segInit();
+  19   1      
+  20   1          printf("\r\n=== ADC Voltmeter ===\r\n");
+  21   1      
+  22   1          while (1) {
+  23   2              adcVal = adcRead(2);
+  24   2              mV = adcToMv(adcVal);
+  25   2      
+  26   2              if (adcVal != lastAdc) {
+  27   3                  printf("P0.2: %4u (%u.%03uV)\r\n",
+  28   3                         adcVal, mV / 1000, mV % 1000);
+  29   3                  lastAdc = adcVal;
+  30   3              }
+  31   2      
+  32   2              for (i = 0; i < 50; i++) {
+  33   3                  segShowRaw(0, segCode(mV / 1000));
+  34   3                  segShowRaw(1, segCode((mV / 100) % 10) & 0x7F);
+  35   3                  segShowRaw(2, segCode((mV / 10) % 10));
+  36   3                  segShowRaw(3, segCode(mV % 10));
+  37   3              }
+  38   2          }
+  39   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    222    ----
+   CONSTANT SIZE    =     49    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       7
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

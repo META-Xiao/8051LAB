@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   MAIN                                                              06/26/2026 13:28:15 PAGE 1   
+C51 COMPILER V9.60.7.0   MAIN                                                              06/26/2026 18:16:23 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
@@ -8,64 +8,69 @@ COMPILER INVOKED BY: D:\keilv5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE I
 
 line level    source
 
-   1          /**
-   2           * main.c — 蓝牙 Echo 测试
-   3           *
-   4           * 手机 BLE 发数据 → MCU 收到 → 原样发回 → 手机显示
-   5           */
-   6          
-   7          #include "sysinit.h"
-   8          #include "uart.h"
-   9          #include "stdio.h"
-  10          
-  11          sbit BT_STATE = P0^0;
+   1          /* BLE 5.0 透传: MPU6050 -> 手机
+   2             VCC-3.3V  GND-GND  TXD-P0.5  RXD-P0.4
+   3             MPU6050: SDA-P0.2  SCL-P0.3 */
+   4          #include "sysinit.h"
+   5          #include "bluetooth.h"
+   6          #include "mpu6050.h"
+   7          #include "stdio.h"
+   8          #include "math.h"
+   9          
+  10          int   xdata AX, AY, AZ, GX, GY, GZ;
+  11          float xdata roll, pitch, yaw;
   12          
-  13          void main(void)
+  13          static void delayMs(uint ms)
   14          {
-  15   1          uchar prevState, btConnected;
-  16   1          uchar rxChar;
-  17   1      
-  18   1          sysInit();
-  19   1          uartInitBaud(115200);
-  20   1      
-  21   1          printf("\r\n");
-  22   1          printf("================================\r\n");
-  23   1          printf("  BT1141514 Echo Test\r\n");
-  24   1          printf("  Baud: 115200\r\n");
-  25   1          printf("================================\r\n\r\n");
-  26   1      
-  27   1          prevState = BT_STATE;
-  28   1      
-  29   1          while (1) {
-  30   2              btConnected = BT_STATE;
-  31   2              if (btConnected != prevState) {
-  32   3                  prevState = btConnected;
-  33   3                  printf("[BT] %s\r\n", btConnected ? ">>> Connected <<<" : ">>> Disconnected <<<");
-  34   3              }
-  35   2      
-  36   2              /* Echo: 收到什么发回什么 */
-  37   2              if (RI0) {
-  38   3                  RI0 = 0;
-  39   3                  rxChar = SBUF0;
-  40   3                  printf("RX:'%c'(0x%02X)\r\n",
-  41   3                         (rxChar >= 32 && rxChar <= 126) ? rxChar : '.',
-  42   3                         (uint)rxChar);
-  43   3                  SBUF0 = rxChar;
-  44   3                  while (TI0 == 0);
-  45   3                  TI0 = 0;
-  46   3              }
-  47   2          }
-  48   1      }
+  15   1          uchar j;
+  16   1          while (ms--) {
+  17   2              for (j = 0; j < 250; j++);
+  18   2          }
+  19   1      }
+  20          
+  21          static void initT2(void)
+  22          {
+  23   1          TMR2CN   = 0x04;
+  24   1          TMR2RLL  = 0xF9;
+  25   1          TMR2RLH  = 0x38;
+  26   1          TMR2L    = 0xF9;
+  27   1          TMR2H    = 0x38;
+  28   1          ET2      = 1;
+  29   1      }
+  30          
+  31          void main(void)
+  32          {
+  33   1          sysInit();
+  34   1          btInit(115200);
+  35   1          mpu6050Init();
+  36   1          initT2();
+  37   1      
+  38   1          printf("=== BLE MPU6050 ===\r\n");
+  39   1      
+  40   1          while (1) {
+  41   2              printf("A:%d,%d,%d G:%d,%d,%d R%d,P%d,Y%d\r\n",
+  42   2                     AX, AY, AZ, GX, GY, GZ,
+  43   2                     (int)roll, (int)pitch, (int)yaw);
+  44   2              delayMs(100);
+  45   2          }
+  46   1      }
+  47          
+  48          void t2ISR(void) interrupt 5
+  49          {
+  50   1          TF2H = 0;
+  51   1          mpu6050ReadAll(&AX, &AY, &AZ, &GX, &GY, &GZ);
+  52   1          mpu6050Filter(AX, AY, AZ, GX, GY, GZ, &roll, &pitch, &yaw);
+  53   1      }
+
+C51 COMPILER V9.60.7.0   MAIN                                                              06/26/2026 18:16:23 PAGE 2   
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    161    ----
-   CONSTANT SIZE    =    183    ----
-   XDATA SIZE       =   ----    ----
-C51 COMPILER V9.60.7.0   MAIN                                                              06/26/2026 13:28:15 PAGE 2   
-
+   CODE SIZE        =    391    ----
+   CONSTANT SIZE    =     58    ----
+   XDATA SIZE       =     24    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =   ----       2
+   DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.

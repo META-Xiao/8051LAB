@@ -1,0 +1,7 @@
+".\Objects\main.obj",
+".\Objects\pcf8591.obj",
+".\Objects\segdisplay.obj",
+".\Objects\sysinit.obj",
+".\Objects\uart.obj" 
+TO ".\Objects\PCF8591" 
+PRINT(".\Listings\PCF8591.m51") RAMSIZE(256) 

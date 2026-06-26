@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   BLUETOOTH                                                         06/26/2026 13:28:15 PAGE 1   
+C51 COMPILER V9.60.7.0   BLUETOOTH                                                         06/26/2026 18:16:23 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE BLUETOOTH
@@ -8,261 +8,193 @@ COMPILER INVOKED BY: D:\keilv5\C51\BIN\C51.EXE ..\lib\bluetooth.c OPTIMIZE(8,SPE
 
 line level    source
 
-   1          /**
-   2           * bluetooth.c — HC-05 / BLE 5.0 蓝牙模块驱动
-   3           *
-   4           * 基于 UART0 透传, 默认波特率 9600 (匹配 HC-05 出厂值)
-   5           * TX=P0.4, RX=P0.5 (交叉开关自动分配)
-   6           */
-   7          
-   8          #include "bluetooth.h"
-   9          #include "uart.h"
-  10          #include "stdio.h"
-  11          #include "string.h"
-  12          
-  13          /* 内部延时 (24.5MHz 系统时钟) */
-  14          static void btDelayMs(uint ms)
-  15          {
-  16   1          uchar j;
-  17   1          while (ms--) {
-  18   2              for (j = 0; j < 250; j++);
-  19   2          }
-  20   1      }
-  21          
-  22          /* 延时 10us 级 (用于 AT 模式时序) */
-  23          static void btDelay10us(uchar n)
+   1          /* BLE 5.0 / HC-05 蓝牙驱动: UART透传 + AT指令引擎 */
+   2          #include "bluetooth.h"
+   3          #include "uart.h"
+   4          #include "stdio.h"
+   5          #include "string.h"
+   6          
+   7          static void btDelayMs(uint ms)
+   8          {
+   9   1          uchar j;
+  10   1          while (ms--) {
+  11   2              for (j = 0; j < 250; j++);
+  12   2          }
+  13   1      }
+  14          
+  15          static void btDelay10us(uchar n)
+  16          {
+  17   1          uchar i, j;
+  18   1          for (i = 0; i < n; i++) {
+  19   2              for (j = 0; j < 18; j++);
+  20   2          }
+  21   1      }
+  22          
+  23          void btInit(ulong baud)
   24          {
-  25   1          uchar i, j;
-  26   1          for (i = 0; i < n; i++) {
-  27   2              for (j = 0; j < 18; j++);
-  28   2          }
-  29   1      }
-  30          
-  31          /* ===== 基本 API ===== */
-  32          
-  33          void btInit(ulong baud)
-  34          {
-  35   1          /* 初始化 UART0 为指定波特率 */
-  36   1          uartInitBaud(baud);
-  37   1      
-  38   1          /* 确保 KEY 引脚为低电平 (透传模式) */
-  39   1          BT_KEY = 0;
-  40   1      
-  41   1          /* 等待蓝牙模块稳定上电 */
-  42   1          btDelayMs(500);
-  43   1      }
-  44          
-  45          void btInitBaud(ulong baud)
-  46          {
-  47   1          uartInitBaud(baud);
+  25   1          uartInitBaud(baud);
+  26   1          BT_KEY = 1;
+  27   1          btDelayMs(500);
+  28   1      }
+  29          
+  30          void btInitBaud(ulong baud)
+  31          {
+  32   1          uartInitBaud(baud);
+  33   1      }
+  34          
+  35          void btSendByte(uchar dat)
+  36          {
+  37   1          SBUF0 = dat;
+  38   1          while (TI0 == 0);
+  39   1          TI0 = 0;
+  40   1      }
+  41          
+  42          void btSendBuf(uchar *buf, uint len)
+  43          {
+  44   1          uint i;
+  45   1          for (i = 0; i < len; i++) {
+  46   2              btSendByte(buf[i]);
+  47   2          }
   48   1      }
   49          
-  50          void btSendByte(uchar dat)
+  50          void btEnterATMode(void)
   51          {
-  52   1          SBUF0 = dat;
-  53   1          while (TI0 == 0);
-  54   1          TI0 = 0;
-C51 COMPILER V9.60.7.0   BLUETOOTH                                                         06/26/2026 13:28:15 PAGE 2   
+  52   1          BT_KEY = 0;
+  53   1          btDelayMs(100);
+  54   1      }
+C51 COMPILER V9.60.7.0   BLUETOOTH                                                         06/26/2026 18:16:23 PAGE 2   
 
-  55   1      }
-  56          
-  57          void btSendBuf(uchar *buf, uint len)
-  58          {
-  59   1          uint i;
-  60   1          for (i = 0; i < len; i++) {
-  61   2              btSendByte(buf[i]);
-  62   2          }
-  63   1      }
-  64          
-  65          /* ===== AT 指令 API ===== */
-  66          
-  67          void btEnterATMode(void)
-  68          {
-  69   1          /* HC-05: 拉高 KEY 引脚进入 AT 模式
-  70   1           * 需要在上电时将 KEY 拉高, 或运行时拉高 KEY 然后复位模块
-  71   1           * 此处拉高 KEY, 如果模块支持热切换则立即进入 AT 模式
-  72   1           */
-  73   1          BT_KEY = 1;
-  74   1          btDelayMs(100);
-  75   1      
-  76   1          /* 注意: 部分 HC-05 模块进入 AT 模式后波特率固定为 38400
-  77   1           * 如果你的模块有此特性, 请在此处调用 uartInitBaud(38400);
-  78   1           */
-  79   1      }
-  80          
-  81          void btExitATMode(void)
-  82          {
-  83   1          /* 拉低 KEY 恢复透传模式 */
-  84   1          BT_KEY = 0;
-  85   1          btDelayMs(100);
-  86   1      }
-  87          
-  88          uchar btSendAT(uchar *cmd, uint timeoutMs)
-  89          {
-  90   1          uchar xdata buf[32];
-  91   1          uint len;
-  92   1      
-  93   1          len = btSendATResp(cmd, buf, sizeof(buf), timeoutMs);
-  94   1      
-  95   1          if (len == 0) return 0;
-  96   1      
-  97   1          /* 检查应答中是否包含 "OK" */
-  98   1          {
-  99   2              uint i;
- 100   2              for (i = 0; i < len - 1; i++) {
- 101   3                  if (buf[i] == 'O' && buf[i + 1] == 'K') return 1;
- 102   3              }
- 103   2          }
- 104   1          return 0;
- 105   1      }
- 106          
- 107          uint btSendATResp(uchar *cmd, uchar *buf, uint maxLen, uint timeoutMs)
- 108          {
- 109   1          uint idx = 0;
- 110   1          uint elapsed = 0;
+  55          
+  56          void btExitATMode(void)
+  57          {
+  58   1          BT_KEY = 1;
+  59   1          btDelayMs(100);
+  60   1      }
+  61          
+  62          uchar btSendAT(uchar *cmd, uint timeoutMs)
+  63          {
+  64   1          uchar xdata buf[32];
+  65   1          uint len, i;
+  66   1      
+  67   1          len = btSendATResp(cmd, buf, sizeof(buf), timeoutMs);
+  68   1          if (len == 0) return 0;
+  69   1      
+  70   1          for (i = 0; i < len - 1; i++) {
+  71   2              if (buf[i] == 'O' && buf[i + 1] == 'K') return 1;
+  72   2          }
+  73   1          return 0;
+  74   1      }
+  75          
+  76          uint btSendATResp(uchar *cmd, uchar *buf, uint maxLen, uint timeoutMs)
+  77          {
+  78   1          uint idx = 0;
+  79   1          uint elapsed = 0;
+  80   1      
+  81   1          btSendStr("AT");
+  82   1          if (cmd != 0 && cmd[0] != '\0') {
+  83   2              btSendBuf(cmd, strlen((char *)cmd));
+  84   2          }
+  85   1          btSendByte('\r');
+  86   1          btSendByte('\n');
+  87   1      
+  88   1          while (elapsed < timeoutMs) {
+  89   2              if (RI0) {
+  90   3                  RI0 = 0;
+  91   3                  if (idx < maxLen - 1) {
+  92   4                      buf[idx++] = SBUF0;
+  93   4                  }
+  94   3                  if (idx >= 4 &&
+  95   3                      buf[idx - 4] == '\r' && buf[idx - 3] == '\n' &&
+  96   3                      buf[idx - 2] == 'O'  && buf[idx - 1] == 'K') {
+  97   4                      break;
+  98   4                  }
+  99   3                  if (idx >= 8 &&
+ 100   3                      buf[idx - 8] == '\r' && buf[idx - 7] == '\n' &&
+ 101   3                      buf[idx - 6] == 'E'  && buf[idx - 5] == 'R' &&
+ 102   3                      buf[idx - 4] == 'R'  && buf[idx - 3] == 'O' &&
+ 103   3                      buf[idx - 2] == 'R') {
+ 104   4                      break;
+ 105   4                  }
+ 106   3                  elapsed = 0;
+ 107   3              }
+ 108   2              btDelayMs(1);
+ 109   2              elapsed++;
+ 110   2          }
  111   1      
- 112   1          /* 发送 "AT" + 指令 + "\r\n" */
- 113   1          btSendStr("AT");
- 114   1          if (cmd != 0 && cmd[0] != '\0') {
- 115   2              btSendBuf(cmd, strlen((char *)cmd));
- 116   2          }
-C51 COMPILER V9.60.7.0   BLUETOOTH                                                         06/26/2026 13:28:15 PAGE 3   
+ 112   1          if (idx == 0) return 0;
+ 113   1          buf[idx] = '\0';
+ 114   1          return idx;
+ 115   1      }
+ 116          
+C51 COMPILER V9.60.7.0   BLUETOOTH                                                         06/26/2026 18:16:23 PAGE 3   
 
- 117   1          btSendByte('\r');
- 118   1          btSendByte('\n');
- 119   1      
- 120   1          /* 等待应答, 超时返回0 */
- 121   1          while (elapsed < timeoutMs) {
- 122   2              if (RI0) {
- 123   3                  RI0 = 0;
- 124   3                  if (idx < maxLen - 1) {
- 125   4                      buf[idx++] = SBUF0;
- 126   4                  }
- 127   3                  /* 检测 "\r\nOK\r\n" 或 "\r\nERROR\r\n" 终止符
- 128   3                   * 简化判断: 收到 OK 或 ERROR 后不再等待新数据
- 129   3                   */
- 130   3                  if (idx >= 4) {
- 131   4                      if (buf[idx - 4] == '\r' && buf[idx - 3] == '\n' &&
- 132   4                          buf[idx - 2] == 'O'  && buf[idx - 1] == 'K') {
- 133   5                          break;
- 134   5                      }
- 135   4                      if (idx >= 8 &&
- 136   4                          buf[idx - 8] == '\r' && buf[idx - 7] == '\n' &&
- 137   4                          buf[idx - 6] == 'E'  && buf[idx - 5] == 'R' &&
- 138   4                          buf[idx - 4] == 'R'  && buf[idx - 3] == 'O' &&
- 139   4                          buf[idx - 2] == 'R') {
- 140   5                          break;
- 141   5                      }
- 142   4                  }
- 143   3                  elapsed = 0;  /* 有数据到达, 重置超时 */
- 144   3              }
- 145   2              btDelayMs(1);
- 146   2              elapsed++;
- 147   2          }
- 148   1      
- 149   1          if (idx == 0) return 0;
- 150   1      
- 151   1          buf[idx] = '\0';
- 152   1          return idx;
- 153   1      }
- 154          
- 155          /* ===== 批量配置 API ===== */
- 156          
- 157          uchar btConfig(BtConfig *cfg)
- 158          {
- 159   1          uchar ok;
- 160   1      
- 161   1          btEnterATMode();
- 162   1      
- 163   1          /* 基础连接测试 */
- 164   1          ok = btSendAT("", 1000);
- 165   1          if (!ok) {
- 166   2              btExitATMode();
- 167   2              return 0;
- 168   2          }
- 169   1      
- 170   1          /* 设置角色 */
- 171   1          if (cfg->role <= 2) {
- 172   2              btSendAT("+ROLE=0", 1000);  /* 默认从机 */
- 173   2          }
- 174   1      
- 175   1          /* 设置设备名称 */
- 176   1          if (cfg->name != 0 && cfg->name[0] != '\0') {
- 177   2              uchar xdata cmd[40];
- 178   2              sprintf((char *)cmd, "+NAME=%s", (char *)cfg->name);
-C51 COMPILER V9.60.7.0   BLUETOOTH                                                         06/26/2026 13:28:15 PAGE 4   
-
- 179   2              btSendAT(cmd, 1000);
- 180   2          }
- 181   1      
- 182   1          /* 设置配对码 */
- 183   1          if (cfg->pincode != 0 && cfg->pincode[0] != '\0') {
- 184   2              uchar xdata cmd[20];
- 185   2              sprintf((char *)cmd, "+PSWD=%s", (char *)cfg->pincode);
- 186   2              btSendAT(cmd, 1000);
- 187   2          }
- 188   1      
- 189   1          /* 设置波特率 (HC-05: 1=1200,2=2400,3=4800,4=9600,5=19200,6=38400,7=57600,8=115200) */
- 190   1          if (cfg->baud > 0) {
- 191   2              uchar baudCode;
- 192   2              switch (cfg->baud) {
- 193   3                  case 1200:   baudCode = 1; break;
- 194   3                  case 2400:   baudCode = 2; break;
- 195   3                  case 4800:   baudCode = 3; break;
- 196   3                  case 9600:   baudCode = 4; break;
- 197   3                  case 19200:  baudCode = 5; break;
- 198   3                  case 38400:  baudCode = 6; break;
- 199   3                  case 57600:  baudCode = 7; break;
- 200   3                  case 115200: baudCode = 8; break;
- 201   3                  default:     baudCode = 4; break;  /* 默认 9600 */
- 202   3              }
- 203   2              {
- 204   3                  uchar xdata cmd[15];
- 205   3                  sprintf((char *)cmd, "+UART=%d,0,0", baudCode);
- 206   3                  btSendAT(cmd, 1000);
- 207   3              }
- 208   2          }
- 209   1      
- 210   1          btExitATMode();
- 211   1          return 1;
- 212   1      }
- 213          
- 214          uchar btResetFactory(void)
- 215          {
- 216   1          uchar ok;
- 217   1      
- 218   1          btEnterATMode();
- 219   1          ok = btSendAT("+ORGL", 3000);  /* 恢复出厂设置, 需要更长超时 */
- 220   1          btExitATMode();
- 221   1      
- 222   1          return ok;
- 223   1      }
- 224          
- 225          /* ===== 数据接收 ===== */
- 226          
- 227          uchar btReadByte(void)
- 228          {
- 229   1          if (RI0) {
- 230   2              RI0 = 0;
- 231   2              return SBUF0;
- 232   2          }
- 233   1          return 0;
- 234   1      }
- 235          
- 236          uchar btAvailable(void)
- 237          {
- 238   1          return RI0;
- 239   1      }
-
-C51 COMPILER V9.60.7.0   BLUETOOTH                                                         06/26/2026 13:28:15 PAGE 5   
+ 117          uchar btConfig(BtConfig *cfg)
+ 118          {
+ 119   1          if (!btSendAT("", 1000)) return 0;
+ 120   1      
+ 121   1          if (cfg->name != 0 && cfg->name[0] != '\0') {
+ 122   2              uchar xdata cmd[40];
+ 123   2              sprintf((char *)cmd, "+NAME=%s", (char *)cfg->name);
+ 124   2              btSendAT(cmd, 1000);
+ 125   2          }
+ 126   1      
+ 127   1          if (cfg->pincode != 0 && cfg->pincode[0] != '\0') {
+ 128   2              uchar xdata cmd[20];
+ 129   2              sprintf((char *)cmd, "+PSWD=%s", (char *)cfg->pincode);
+ 130   2              btSendAT(cmd, 1000);
+ 131   2          }
+ 132   1      
+ 133   1          if (cfg->baud > 0) {
+ 134   2              uchar baudCode;
+ 135   2              switch (cfg->baud) {
+ 136   3                  case 1200:   baudCode = 1; break;
+ 137   3                  case 2400:   baudCode = 2; break;
+ 138   3                  case 4800:   baudCode = 3; break;
+ 139   3                  case 9600:   baudCode = 4; break;
+ 140   3                  case 19200:  baudCode = 5; break;
+ 141   3                  case 38400:  baudCode = 6; break;
+ 142   3                  case 57600:  baudCode = 7; break;
+ 143   3                  case 115200: baudCode = 8; break;
+ 144   3                  default:     baudCode = 4; break;
+ 145   3              }
+ 146   2              {
+ 147   3                  uchar xdata cmd[15];
+ 148   3                  sprintf((char *)cmd, "+UART=%d,0,0", baudCode);
+ 149   3                  btSendAT(cmd, 1000);
+ 150   3              }
+ 151   2          }
+ 152   1      
+ 153   1          return 1;
+ 154   1      }
+ 155          
+ 156          uchar btResetFactory(void)
+ 157          {
+ 158   1          return btSendAT("+ORGL", 3000);
+ 159   1      }
+ 160          
+ 161          uchar btReadByte(void)
+ 162          {
+ 163   1          if (RI0) {
+ 164   2              RI0 = 0;
+ 165   2              return SBUF0;
+ 166   2          }
+ 167   1          return 0;
+ 168   1      }
+ 169          
+ 170          uchar btAvailable(void)
+ 171          {
+ 172   1          return RI0;
+ 173   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   1091    ----
-   CONSTANT SIZE    =     49    ----
+   CODE SIZE        =   1033    ----
+   CONSTANT SIZE    =     41    ----
+C51 COMPILER V9.60.7.0   BLUETOOTH                                                         06/26/2026 18:16:23 PAGE 4   
+
    XDATA SIZE       =   ----     107
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =   ----      25
+   DATA SIZE        =   ----      23
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.

@@ -1,0 +1,7 @@
+".\Objects\main.obj",
+".\Objects\ds18b20.obj",
+".\Objects\esp8266.obj",
+".\Objects\sysinit.obj",
+".\Objects\uart.obj" 
+TO ".\Objects\wifi" 
+PRINT(".\Listings\wifi.m51") RAMSIZE(256) 

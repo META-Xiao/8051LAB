@@ -2,7 +2,7 @@
    VCC-3.3V  GND-GND  TXD-P0.5  RXD-P0.4
    MPU6050: SDA-P0.2  SCL-P0.3 */
 #include "sysinit.h"
-#include "bluetooth.h"
+#include "uart.h"
 #include "mpu6050.h"
 #include "stdio.h"
 #include "math.h"
@@ -31,7 +31,7 @@ static void initT2(void)
 void main(void)
 {
     sysInit();
-    btInit(115200);
+    uartInit();
     mpu6050Init();
     initT2();
 

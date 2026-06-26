@@ -1,0 +1,6 @@
+".\Objects\main.obj",
+".\Objects\dac.obj",
+".\Objects\sysinit.obj",
+".\Objects\uart.obj" 
+TO ".\Objects\Sawtooth" 
+PRINT(".\Listings\Sawtooth.m51") RAMSIZE(256) 
