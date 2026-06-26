@@ -1,14 +1,6 @@
-/**
- * main.c — BLE 5.0 蓝牙透传: MPU6050 → 手机
- *
- * 硬件 (仅4线):
- *   BLE VCC → 3.3V    BLE GND → GND
- *   BLE TXD → P0.5    BLE RXD → P0.4
- *   MPU6050 SDA=P0.2  SCL=P0.3
- *
- * 手机端: BLE调试助手 → 连接 → 启用Notify → 收数据
- */
-
+/* BLE 5.0 透传: MPU6050 -> 手机
+   VCC-3.3V  GND-GND  TXD-P0.5  RXD-P0.4
+   MPU6050: SDA-P0.2  SCL-P0.3 */
 #include "sysinit.h"
 #include "bluetooth.h"
 #include "mpu6050.h"

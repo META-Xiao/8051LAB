@@ -1,3 +1,4 @@
+/* UART0 串口: 自动适配 T1M=0/1, 覆盖 1200~115200 */
 #include "uart.h"
 #include "stdio.h"
 
@@ -12,22 +13,30 @@ void uartInit(void)
 
 void uartInitBaud(ulong baud)
 {
+    ulong divisor;
     uchar reload;
 
     XBR0 |= 0x01;
     XBR1 |= 0x40;
 
-    CKCON |= 0x08;
-
     TMOD = (TMOD & 0x0F) | 0x20;
 
-    reload = (uchar)(256UL - sysClk / (2UL * baud));
+    divisor = sysClk / (2UL * baud);
+    if (divisor > 0 && divisor <= 256) {
+        CKCON |= 0x08;
+        reload = (uchar)(256UL - divisor);
+    } else {
+        CKCON &= ~0x08;
+        divisor = sysClk / (24UL * baud);
+        if (divisor > 256 || divisor == 0) {
+            divisor = 256;
+        }
+        reload = (uchar)(256UL - divisor);
+    }
+
     TH1 = reload;
-
     SCON0 = 0x10;
-
     TR1 = 1;
-
     TI0 = 1;
 }
 
