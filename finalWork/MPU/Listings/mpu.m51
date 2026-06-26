@@ -1,4 +1,4 @@
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                    06/14/2026  21:17:50  PAGE 1
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                    06/26/2026  13:36:53  PAGE 1
 
 
 BL51 BANKED LINKER/LOCATER V6.22.4.0, INVOKED BY:
@@ -59,7 +59,7 @@ LINK MAP OF MODULE:  .\Objects\mpu (MAIN)
             REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
             DATA    0008H     0004H     UNIT         ?DT?UART
                     000CH     0014H                  *** GAP ***
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/14/2026  21:17:50  PAGE 2
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/26/2026  13:36:53  PAGE 2
 
 
             BIT     0020H.0   0001H.3   UNIT         _BIT_GROUP_
@@ -82,32 +82,32 @@ LINK MAP OF MODULE:  .\Objects\mpu (MAIN)
             CODE    0CCBH     027CH     UNIT         ?PR?_MPU6050FILTER?MPU6050
             CODE    0F47H     0128H     UNIT         ?PR?ATAN?ATAN
             CODE    106FH     00BEH     UNIT         ?PR?T2ISR?MAIN
-            CODE    112DH     0098H     UNIT         ?PR?_MPU6050READALL?MPU6050
-            CODE    11C5H     008CH     UNIT         ?C_C51STARTUP
-            CODE    1251H     0073H     UNIT         ?PR?_ATAN2?ATAN2
-            CODE    12C4H     005DH     UNIT         ?PR?MAIN?MAIN
-            CODE    1321H     0050H     UNIT         ?PR?_MPU6050READREGS?MPU6050
-            CODE    1371H     004AH     UNIT         ?PR?_UARTINITBAUD?UART
-            CODE    13BBH     0030H     UNIT         ?PR?MPU6050INIT?MPU6050
-            CODE    13EBH     002AH     UNIT         ?PR?_I2CSENDBYTE?MPU6050
-            CODE    1415H     001AH     UNIT         ?PR?I2CRECVACK?MPU6050
-            CODE    142FH     001AH     UNIT         ?PR?_WRITEREG?MPU6050
-            CODE    1449H     0016H     UNIT         ?PR?_DELAYMS?MAIN
-            CODE    145FH     0012H     UNIT         ?PR?INITT2?MAIN
-            CODE    1471H     000FH     UNIT         ?PR?I2CSTART?MPU6050
-            CODE    1480H     000FH     UNIT         ?PR?SYSINIT?SYSINIT
-            CODE    148FH     000EH     UNIT         ?PR?I2CDELAY?MPU6050
-            CODE    149DH     000DH     UNIT         ?PR?_I2CSENDACK?MPU6050
-            CODE    14AAH     000CH     UNIT         ?PR?I2CSTOP?MPU6050
-            CODE    14B6H     000BH     UNIT         ?CO?MAIN
-            CODE    14C1H     000BH     UNIT         ?PR?UARTINIT?UART
-            CODE    14CCH     0008H     UNIT         ?PR?_PUTCHAR?UART
-            CODE    14D4H     0007H     UNIT         ?PR?SYSPCAINIT?SYSINIT
-            CODE    14DBH     0007H     UNIT         ?PR?SYSTIMERINIT?SYSINIT
-            CODE    14E2H     0007H     UNIT         ?C_INITSEG
-            CODE    14E9H     0004H     UNIT         ?PR?SYSPORTINIT?SYSINIT
-            CODE    14EDH     0004H     UNIT         ?PR?SYSOSCINIT?SYSINIT
-            CODE    14F1H     0004H     UNIT         ?PR?SYSINTINIT?SYSINIT
+            CODE    112DH     0099H     UNIT         ?PR?MAIN?MAIN
+            CODE    11C6H     0098H     UNIT         ?PR?_MPU6050READALL?MPU6050
+            CODE    125EH     008CH     UNIT         ?C_C51STARTUP
+            CODE    12EAH     0073H     UNIT         ?PR?_ATAN2?ATAN2
+            CODE    135DH     0050H     UNIT         ?PR?_MPU6050READREGS?MPU6050
+            CODE    13ADH     004AH     UNIT         ?PR?_UARTINITBAUD?UART
+            CODE    13F7H     003AH     UNIT         ?CO?MAIN
+            CODE    1431H     0030H     UNIT         ?PR?MPU6050INIT?MPU6050
+            CODE    1461H     002AH     UNIT         ?PR?_I2CSENDBYTE?MPU6050
+            CODE    148BH     001CH     UNIT         ?C_INITSEG
+            CODE    14A7H     001AH     UNIT         ?PR?I2CRECVACK?MPU6050
+            CODE    14C1H     001AH     UNIT         ?PR?_WRITEREG?MPU6050
+            CODE    14DBH     0016H     UNIT         ?PR?_DELAYMS?MAIN
+            CODE    14F1H     0012H     UNIT         ?PR?INITT2?MAIN
+            CODE    1503H     000FH     UNIT         ?PR?I2CSTART?MPU6050
+            CODE    1512H     000FH     UNIT         ?PR?SYSINIT?SYSINIT
+            CODE    1521H     000EH     UNIT         ?PR?I2CDELAY?MPU6050
+            CODE    152FH     000DH     UNIT         ?PR?_I2CSENDACK?MPU6050
+            CODE    153CH     000CH     UNIT         ?PR?I2CSTOP?MPU6050
+            CODE    1548H     000BH     UNIT         ?PR?UARTINIT?UART
+            CODE    1553H     0008H     UNIT         ?PR?_PUTCHAR?UART
+            CODE    155BH     0007H     UNIT         ?PR?SYSPCAINIT?SYSINIT
+            CODE    1562H     0007H     UNIT         ?PR?SYSTIMERINIT?SYSINIT
+            CODE    1569H     0004H     UNIT         ?PR?SYSPORTINIT?SYSINIT
+            CODE    156DH     0004H     UNIT         ?PR?SYSOSCINIT?SYSINIT
+            CODE    1571H     0004H     UNIT         ?PR?SYSINTINIT?SYSINIT
 
 
 
@@ -119,7 +119,7 @@ SEGMENT                                 BIT_GROUP          DATA_GROUP          X
 --------------------------------------------------------------------------------------------
 ?PR?T2ISR?MAIN                       -----    -----      -----    -----      -----    -----
   +--> ?PR?_MPU6050READALL?MPU6050
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/14/2026  21:17:50  PAGE 3
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/26/2026  13:36:53  PAGE 3
 
 
   +--> ?PR?_MPU6050FILTER?MPU6050
@@ -179,7 +179,7 @@ SEGMENT                                 BIT_GROUP          DATA_GROUP          X
   +--> ?PR?_DELAYMS?MAIN
 
 ?PR?SYSINIT?SYSINIT                  -----    -----      -----    -----      -----    -----
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/14/2026  21:17:50  PAGE 4
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/26/2026  13:36:53  PAGE 4
 
 
   +--> ?PR?SYSPCAINIT?SYSINIT
@@ -230,16 +230,16 @@ SYMBOL TABLE OF MODULE:  .\Objects\mpu (MAIN)
   X:000CH         PUBLIC        GY
   X:000EH         PUBLIC        GZ
   D:00C0H         PUBLIC        SMB0CN
-  C:12C4H         PUBLIC        main
+  C:112DH         PUBLIC        main
   D:00F8H         PUBLIC        SPI0CN
   D:0088H         PUBLIC        TCON
   D:00C8H         PUBLIC        TMR2CN
   X:0010H         PUBLIC        roll
-  C:145FH         SYMBOL        initT2
+  C:14F1H         SYMBOL        initT2
   B:00A8H.5       PUBLIC        ET2
   X:0014H         PUBLIC        yaw
-  C:1449H         SYMBOL        _delayMs
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/14/2026  21:17:50  PAGE 5
+  C:14DBH         SYMBOL        _delayMs
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/26/2026  13:36:53  PAGE 5
 
 
   D:0098H         PUBLIC        SCON0
@@ -251,42 +251,43 @@ SYMBOL TABLE OF MODULE:  .\Objects\mpu (MAIN)
   -------         DO            
   D:0005H         SYMBOL        j
   -------         ENDDO         
-  C:1449H         LINE#         10
-  C:1449H         LINE#         11
-  C:1449H         LINE#         13
-  C:1453H         LINE#         14
-  C:145EH         LINE#         15
-  C:145EH         LINE#         16
+  C:14DBH         LINE#         10
+  C:14DBH         LINE#         11
+  C:14DBH         LINE#         13
+  C:14E5H         LINE#         14
+  C:14F0H         LINE#         15
+  C:14F0H         LINE#         16
   -------         ENDPROC       _DELAYMS
   -------         PROC          INITT2
-  C:145FH         LINE#         18
-  C:145FH         LINE#         19
-  C:145FH         LINE#         20
-  C:1462H         LINE#         21
-  C:1465H         LINE#         22
-  C:1468H         LINE#         23
-  C:146BH         LINE#         24
-  C:146EH         LINE#         25
-  C:1470H         LINE#         26
+  C:14F1H         LINE#         18
+  C:14F1H         LINE#         19
+  C:14F1H         LINE#         20
+  C:14F4H         LINE#         21
+  C:14F7H         LINE#         22
+  C:14FAH         LINE#         23
+  C:14FDH         LINE#         24
+  C:1500H         LINE#         25
+  C:1502H         LINE#         26
   -------         ENDPROC       INITT2
   -------         PROC          MAIN
-  C:12C4H         LINE#         28
-  C:12C4H         LINE#         29
-  C:12C4H         LINE#         30
-  C:12C7H         LINE#         31
-  C:12CAH         LINE#         32
-  C:12CDH         LINE#         33
-  C:12D0H         LINE#         35
-  C:12D0H         LINE#         36
-  C:1318H         LINE#         37
-  C:131FH         LINE#         38
+  C:112DH         LINE#         28
+  C:112DH         LINE#         29
+  C:112DH         LINE#         30
+  C:1130H         LINE#         31
+  C:1133H         LINE#         32
+  C:1136H         LINE#         33
+  C:1139H         LINE#         35
+  C:1142H         LINE#         37
+  C:1142H         LINE#         38
+  C:11BCH         LINE#         39
+  C:11C3H         LINE#         40
   -------         ENDPROC       MAIN
   -------         PROC          T2ISR
-  C:106FH         LINE#         41
-  C:108CH         LINE#         43
-  C:108EH         LINE#         44
-  C:10C4H         LINE#         45
-  C:1112H         LINE#         46
+  C:106FH         LINE#         43
+  C:108CH         LINE#         45
+  C:108EH         LINE#         46
+  C:10C4H         LINE#         47
+  C:1112H         LINE#         48
   -------         ENDPROC       T2ISR
   -------         ENDMOD        MAIN
 
@@ -297,60 +298,60 @@ SYMBOL TABLE OF MODULE:  .\Objects\mpu (MAIN)
   D:00E8H         PUBLIC        ADC0CN
   D:00A4H         PUBLIC        P0MDOUT
   D:00A8H         PUBLIC        IE
-  C:1471H         SYMBOL        i2cStart
+  C:1503H         SYMBOL        i2cStart
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/26/2026  13:36:53  PAGE 6
+
+
   D:00D8H         PUBLIC        PCA0CN
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/14/2026  21:17:50  PAGE 6
-
-
   D:00B8H         PUBLIC        IP
-  C:149DH         SYMBOL        _i2cSendAck
-  C:13EBH         SYMBOL        _i2cSendByte
-  C:141DH         SYMBOL        i2cRecvAck
+  C:152FH         SYMBOL        _i2cSendAck
+  C:1461H         SYMBOL        _i2cSendByte
+  C:14AFH         SYMBOL        i2cRecvAck
   D:00C0H         PUBLIC        SMB0CN
-  C:14AAH         SYMBOL        i2cStop
+  C:153CH         SYMBOL        i2cStop
   C:0003H         SYMBOL        i2cRecvByte
   D:00F1H         PUBLIC        P0MDIN
   D:00F8H         PUBLIC        SPI0CN
-  C:1321H         PUBLIC        _mpu6050ReadRegs
+  C:135DH         PUBLIC        _mpu6050ReadRegs
   D:0088H         PUBLIC        TCON
-  C:13BBH         PUBLIC        mpu6050Init
+  C:1431H         PUBLIC        mpu6050Init
   D:00C8H         PUBLIC        TMR2CN
-  C:112DH         PUBLIC        _mpu6050ReadAll
+  C:11C6H         PUBLIC        _mpu6050ReadAll
   X:0026H         PUBLIC        filterYX
   X:002AH         PUBLIC        filterXZ
   X:002EH         PUBLIC        filterYZ
-  C:142FH         SYMBOL        _writeReg
+  C:14C1H         SYMBOL        _writeReg
   B:0080H.2       PUBLIC        SDA
   B:0080H.3       PUBLIC        SCL
   D:0098H         PUBLIC        SCON0
-  C:1496H         SYMBOL        i2cDelay
+  C:1528H         SYMBOL        i2cDelay
   D:00D0H         PUBLIC        PSW
-  C:1491H         SYMBOL        L?0039
+  C:1523H         SYMBOL        L?0039
   -------         PROC          L?0038
   -------         ENDPROC       L?0038
-  C:1491H         SYMBOL        L?0039
+  C:1523H         SYMBOL        L?0039
   -------         PROC          I2CDELAY
   -------         DO            
   D:0007H         SYMBOL        i
   -------         ENDDO         
-  C:1496H         LINE#         12
-  C:1496H         LINE#         13
-  C:1496H         LINE#         15
-  C:149CH         LINE#         16
+  C:1528H         LINE#         12
+  C:1528H         LINE#         13
+  C:1528H         LINE#         15
+  C:152EH         LINE#         16
   -------         ENDPROC       I2CDELAY
   -------         PROC          I2CSTART
-  C:1471H         LINE#         18
-  C:1471H         LINE#         19
-  C:1471H         LINE#         20
-  C:1478H         LINE#         21
-  C:147DH         LINE#         22
-  C:147FH         LINE#         23
+  C:1503H         LINE#         18
+  C:1503H         LINE#         19
+  C:1503H         LINE#         20
+  C:150AH         LINE#         21
+  C:150FH         LINE#         22
+  C:1511H         LINE#         23
   -------         ENDPROC       I2CSTART
   -------         PROC          I2CSTOP
-  C:14AAH         LINE#         25
-  C:14AAH         LINE#         26
-  C:14AAH         LINE#         27
-  C:14B1H         LINE#         28
+  C:153CH         LINE#         25
+  C:153CH         LINE#         26
+  C:153CH         LINE#         27
+  C:1543H         LINE#         28
   -------         ENDPROC       I2CSTOP
   -------         PROC          L?0037
   -------         ENDPROC       L?0037
@@ -358,41 +359,41 @@ SYMBOL TABLE OF MODULE:  .\Objects\mpu (MAIN)
   -------         DO            
   D:0006H         SYMBOL        ack
   -------         ENDDO         
-  C:141DH         LINE#         31
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/14/2026  21:17:50  PAGE 7
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/26/2026  13:36:53  PAGE 7
 
 
-  C:141DH         LINE#         32
-  C:141DH         LINE#         34
-  C:141FH         LINE#         35
-  C:1422H         LINE#         36
-  C:1427H         LINE#         37
-  C:142CH         LINE#         38
-  C:142EH         LINE#         39
+  C:14AFH         LINE#         31
+  C:14AFH         LINE#         32
+  C:14AFH         LINE#         34
+  C:14B1H         LINE#         35
+  C:14B4H         LINE#         36
+  C:14B9H         LINE#         37
+  C:14BEH         LINE#         38
+  C:14C0H         LINE#         39
   -------         ENDPROC       I2CRECVACK
   -------         PROC          _I2CSENDACK
   D:0007H         SYMBOL        ack
-  C:149DH         LINE#         41
-  C:149DH         LINE#         42
-  C:149DH         LINE#         43
-  C:14A4H         LINE#         44
-  C:14A7H         LINE#         45
-  C:14A9H         LINE#         46
+  C:152FH         LINE#         41
+  C:152FH         LINE#         42
+  C:152FH         LINE#         43
+  C:1536H         LINE#         44
+  C:1539H         LINE#         45
+  C:153BH         LINE#         46
   -------         ENDPROC       _I2CSENDACK
   -------         PROC          _I2CSENDBYTE
   D:0005H         SYMBOL        dat
   -------         DO            
   D:0004H         SYMBOL        i
   -------         ENDDO         
-  C:13EBH         LINE#         48
-  C:13EDH         LINE#         49
-  C:13EDH         LINE#         51
-  C:13EFH         LINE#         52
-  C:140BH         LINE#         53
-  C:140BH         LINE#         54
-  C:140EH         LINE#         55
-  C:1410H         LINE#         56
-  C:1414H         LINE#         57
+  C:1461H         LINE#         48
+  C:1463H         LINE#         49
+  C:1463H         LINE#         51
+  C:1465H         LINE#         52
+  C:1481H         LINE#         53
+  C:1481H         LINE#         54
+  C:1484H         LINE#         55
+  C:1486H         LINE#         56
+  C:148AH         LINE#         57
   -------         ENDPROC       _I2CSENDBYTE
   -------         PROC          I2CRECVBYTE
   -------         DO            
@@ -414,29 +415,29 @@ SYMBOL TABLE OF MODULE:  .\Objects\mpu (MAIN)
   -------         PROC          _WRITEREG
   D:0001H         SYMBOL        reg
   D:0002H         SYMBOL        dat
-  C:142FH         LINE#         71
-  C:1433H         LINE#         72
-  C:1433H         LINE#         73
-  C:1433H         LINE#         74
-  C:1436H         LINE#         75
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/14/2026  21:17:50  PAGE 8
+  C:14C1H         LINE#         71
+  C:14C5H         LINE#         72
+  C:14C5H         LINE#         73
+  C:14C5H         LINE#         74
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/26/2026  13:36:53  PAGE 8
 
 
-  C:143EH         LINE#         76
-  C:1446H         LINE#         77
+  C:14C8H         LINE#         75
+  C:14D0H         LINE#         76
+  C:14D8H         LINE#         77
   -------         ENDPROC       _WRITEREG
   -------         PROC          MPU6050INIT
-  C:13BBH         LINE#         80
-  C:13BBH         LINE#         81
-  C:13BBH         LINE#         82
-  C:13BEH         LINE#         83
-  C:13C1H         LINE#         84
-  C:13C4H         LINE#         85
-  C:13C8H         LINE#         87
-  C:13CFH         LINE#         88
-  C:13D6H         LINE#         89
-  C:13DDH         LINE#         90
-  C:13E4H         LINE#         91
+  C:1431H         LINE#         80
+  C:1431H         LINE#         81
+  C:1431H         LINE#         82
+  C:1434H         LINE#         83
+  C:1437H         LINE#         84
+  C:143AH         LINE#         85
+  C:143EH         LINE#         87
+  C:1445H         LINE#         88
+  C:144CH         LINE#         89
+  C:1453H         LINE#         90
+  C:145AH         LINE#         91
   -------         ENDPROC       MPU6050INIT
   -------         PROC          _MPU6050READREGS
   D:0034H         SYMBOL        reg
@@ -445,19 +446,19 @@ SYMBOL TABLE OF MODULE:  .\Objects\mpu (MAIN)
   -------         DO            
   D:0004H         SYMBOL        i
   -------         ENDDO         
-  C:1321H         LINE#         94
-  C:1329H         LINE#         95
-  C:1329H         LINE#         98
-  C:1329H         LINE#         99
-  C:132CH         LINE#         100
-  C:1334H         LINE#         102
-  C:1337H         LINE#         103
-  C:133FH         LINE#         104
-  C:1347H         LINE#         105
-  C:1359H         LINE#         106
-  C:1366H         LINE#         107
-  C:136BH         LINE#         108
-  C:136EH         LINE#         109
+  C:135DH         LINE#         94
+  C:1365H         LINE#         95
+  C:1365H         LINE#         98
+  C:1365H         LINE#         99
+  C:1368H         LINE#         100
+  C:1370H         LINE#         102
+  C:1373H         LINE#         103
+  C:137BH         LINE#         104
+  C:1383H         LINE#         105
+  C:1395H         LINE#         106
+  C:13A2H         LINE#         107
+  C:13A7H         LINE#         108
+  C:13AAH         LINE#         109
   -------         ENDPROC       _MPU6050READREGS
   -------         PROC          _MPU6050READALL
   D:0022H         SYMBOL        ax
@@ -469,19 +470,19 @@ SYMBOL TABLE OF MODULE:  .\Objects\mpu (MAIN)
   -------         DO            
   X:0018H         SYMBOL        buf
   -------         ENDDO         
-  C:112DH         LINE#         112
-  C:1133H         LINE#         113
-  C:1133H         LINE#         115
-  C:1141H         LINE#         117
-  C:1157H         LINE#         118
-  C:116DH         LINE#         119
-  C:1183H         LINE#         120
-  C:1199H         LINE#         121
-  C:11AFH         LINE#         122
+  C:11C6H         LINE#         112
+  C:11CCH         LINE#         113
+  C:11CCH         LINE#         115
+  C:11DAH         LINE#         117
+  C:11F0H         LINE#         118
+  C:1206H         LINE#         119
+  C:121CH         LINE#         120
+  C:1232H         LINE#         121
+  C:1248H         LINE#         122
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/26/2026  13:36:53  PAGE 9
+
+
   -------         ENDPROC       _MPU6050READALL
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/14/2026  21:17:50  PAGE 9
-
-
   -------         PROC          _MPU6050FILTER
   D:0022H         SYMBOL        ax
   D:0024H         SYMBOL        ay
@@ -515,15 +516,15 @@ SYMBOL TABLE OF MODULE:  .\Objects\mpu (MAIN)
   -------         MODULE        SYSINIT
   C:0000H         SYMBOL        _ICE_DUMMY_
   D:00E8H         PUBLIC        ADC0CN
-  C:14D4H         PUBLIC        sysPcaInit
+  C:155BH         PUBLIC        sysPcaInit
   D:00A8H         PUBLIC        IE
   D:00D9H         PUBLIC        PCA0MD
   D:00D8H         PUBLIC        PCA0CN
   D:00B8H         PUBLIC        IP
   D:00E2H         PUBLIC        XBR1
-  C:14EDH         PUBLIC        sysOscInit
-  C:14E9H         PUBLIC        sysPortInit
-  C:14F1H         PUBLIC        sysIntInit
+  C:156DH         PUBLIC        sysOscInit
+  C:1569H         PUBLIC        sysPortInit
+  C:1571H         PUBLIC        sysIntInit
   D:00C0H         PUBLIC        SMB0CN
   D:00F8H         PUBLIC        SPI0CN
   D:0089H         PUBLIC        TMOD
@@ -531,52 +532,52 @@ SYMBOL TABLE OF MODULE:  .\Objects\mpu (MAIN)
   D:00C8H         PUBLIC        TMR2CN
   D:00B2H         PUBLIC        OSCICN
   D:0098H         PUBLIC        SCON0
-  C:1480H         PUBLIC        sysInit
+  C:1512H         PUBLIC        sysInit
   D:00D0H         PUBLIC        PSW
-  C:14DBH         PUBLIC        sysTimerInit
+  C:1562H         PUBLIC        sysTimerInit
   -------         PROC          SYSPCAINIT
-  C:14D4H         LINE#         3
-  C:14D4H         LINE#         4
-  C:14D4H         LINE#         5
-  C:14D7H         LINE#         6
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/14/2026  21:17:50  PAGE 10
+  C:155BH         LINE#         3
+  C:155BH         LINE#         4
+  C:155BH         LINE#         5
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/26/2026  13:36:53  PAGE 10
 
 
-  C:14DAH         LINE#         7
+  C:155EH         LINE#         6
+  C:1561H         LINE#         7
   -------         ENDPROC       SYSPCAINIT
   -------         PROC          SYSTIMERINIT
-  C:14DBH         LINE#         9
-  C:14DBH         LINE#         10
-  C:14DBH         LINE#         11
-  C:14DEH         LINE#         12
-  C:14E1H         LINE#         13
+  C:1562H         LINE#         9
+  C:1562H         LINE#         10
+  C:1562H         LINE#         11
+  C:1565H         LINE#         12
+  C:1568H         LINE#         13
   -------         ENDPROC       SYSTIMERINIT
   -------         PROC          SYSPORTINIT
-  C:14E9H         LINE#         15
-  C:14E9H         LINE#         16
-  C:14E9H         LINE#         17
-  C:14ECH         LINE#         18
+  C:1569H         LINE#         15
+  C:1569H         LINE#         16
+  C:1569H         LINE#         17
+  C:156CH         LINE#         18
   -------         ENDPROC       SYSPORTINIT
   -------         PROC          SYSOSCINIT
-  C:14EDH         LINE#         20
-  C:14EDH         LINE#         21
-  C:14EDH         LINE#         22
-  C:14F0H         LINE#         23
+  C:156DH         LINE#         20
+  C:156DH         LINE#         21
+  C:156DH         LINE#         22
+  C:1570H         LINE#         23
   -------         ENDPROC       SYSOSCINIT
   -------         PROC          SYSINTINIT
-  C:14F1H         LINE#         25
-  C:14F1H         LINE#         26
-  C:14F1H         LINE#         27
-  C:14F4H         LINE#         28
+  C:1571H         LINE#         25
+  C:1571H         LINE#         26
+  C:1571H         LINE#         27
+  C:1574H         LINE#         28
   -------         ENDPROC       SYSINTINIT
   -------         PROC          SYSINIT
-  C:1480H         LINE#         30
-  C:1480H         LINE#         31
-  C:1480H         LINE#         32
-  C:1483H         LINE#         33
-  C:1486H         LINE#         34
-  C:1489H         LINE#         35
-  C:148CH         LINE#         36
+  C:1512H         LINE#         30
+  C:1512H         LINE#         31
+  C:1512H         LINE#         32
+  C:1515H         LINE#         33
+  C:1518H         LINE#         34
+  C:151BH         LINE#         35
+  C:151EH         LINE#         36
   -------         ENDPROC       SYSINIT
   -------         ENDMOD        SYSINIT
 
@@ -595,50 +596,50 @@ SYMBOL TABLE OF MODULE:  .\Objects\mpu (MAIN)
   D:00C8H         PUBLIC        TMR2CN
   B:0098H.1       PUBLIC        TI0
   D:008DH         PUBLIC        TH1
-  C:1371H         PUBLIC        _uartInitBaud
-  C:14C1H         PUBLIC        uartInit
+  C:13ADH         PUBLIC        _uartInitBaud
+  C:1548H         PUBLIC        uartInit
   B:0088H.6       PUBLIC        TR1
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/26/2026  13:36:53  PAGE 11
+
+
   D:0099H         PUBLIC        SBUF0
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/14/2026  21:17:50  PAGE 11
-
-
   D:0098H         PUBLIC        SCON0
   D:008EH         PUBLIC        CKCON
   D:00D0H         PUBLIC        PSW
-  C:14CCH         PUBLIC        _putchar
+  C:1553H         PUBLIC        _putchar
   D:0008H         SYMBOL        sysClk
   -------         PROC          UARTINIT
-  C:14C1H         LINE#         8
-  C:14C1H         LINE#         9
-  C:14C1H         LINE#         10
+  C:1548H         LINE#         8
+  C:1548H         LINE#         9
+  C:1548H         LINE#         10
   -------         ENDPROC       UARTINIT
   -------         PROC          _UARTINITBAUD
   D:0047H         SYMBOL        baud
   -------         DO            
   D:0007H         SYMBOL        reload
   -------         ENDDO         
-  C:1371H         LINE#         13
-  C:1379H         LINE#         14
-  C:1379H         LINE#         17
-  C:137CH         LINE#         18
-  C:137FH         LINE#         20
-  C:1382H         LINE#         22
-  C:138AH         LINE#         24
-  C:13B1H         LINE#         25
-  C:13B3H         LINE#         27
-  C:13B6H         LINE#         29
-  C:13B8H         LINE#         31
-  C:13BAH         LINE#         32
+  C:13ADH         LINE#         13
+  C:13B5H         LINE#         14
+  C:13B5H         LINE#         17
+  C:13B8H         LINE#         18
+  C:13BBH         LINE#         20
+  C:13BEH         LINE#         22
+  C:13C6H         LINE#         24
+  C:13EDH         LINE#         25
+  C:13EFH         LINE#         27
+  C:13F2H         LINE#         29
+  C:13F4H         LINE#         31
+  C:13F6H         LINE#         32
   -------         ENDPROC       _UARTINITBAUD
   -------         PROC          _PUTCHAR
   D:0007H         SYMBOL        c
-  C:14CCH         LINE#         34
-  C:14CCH         LINE#         35
-  C:14CCH         LINE#         36
-  C:14CFH         LINE#         37
-  C:14D1H         LINE#         38
-  C:14D3H         LINE#         39
-  C:14D3H         LINE#         40
+  C:1553H         LINE#         34
+  C:1553H         LINE#         35
+  C:1553H         LINE#         36
+  C:1556H         LINE#         37
+  C:1558H         LINE#         38
+  C:155AH         LINE#         39
+  C:155AH         LINE#         40
   -------         ENDPROC       _PUTCHAR
   -------         ENDMOD        UART
 
@@ -658,8 +659,8 @@ SYMBOL TABLE OF MODULE:  .\Objects\mpu (MAIN)
   -------         MODULE        ?C?FPNEG
   C:02CCH         PUBLIC        ?C?FPNEG
   -------         ENDMOD        ?C?FPNEG
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/26/2026  13:36:53  PAGE 12
 
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/14/2026  21:17:50  PAGE 12
 
 
   -------         MODULE        ?C?FCAST
@@ -681,7 +682,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\mpu (MAIN)
 
   -------         MODULE        ATAN2
   D:003BH         PUBLIC        ?_atan2?BYTE
-  C:1251H         PUBLIC        _atan2
+  C:12EAH         PUBLIC        _atan2
   -------         ENDMOD        ATAN2
 
   -------         MODULE        ?C?FPCMP
@@ -718,10 +719,10 @@ SYMBOL TABLE OF MODULE:  .\Objects\mpu (MAIN)
   -------         ENDMOD        ?C?CSTPTR
 
   -------         MODULE        ?C?CSTOPTR
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/26/2026  13:36:53  PAGE 13
+
+
   C:065CH         PUBLIC        ?C?CSTOPTR
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/14/2026  21:17:50  PAGE 13
-
-
   -------         ENDMOD        ?C?CSTOPTR
 
   -------         MODULE        ?C?ISTPTR
@@ -772,5 +773,5 @@ SYMBOL TABLE OF MODULE:  .\Objects\mpu (MAIN)
   C:0850H         PUBLIC        ?C?LSTPDATA
   -------         ENDMOD        ?C?LSTPDATA
 
-Program Size: data=79.3 xdata=50 code=5363
+Program Size: data=79.3 xdata=50 code=5491
 LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

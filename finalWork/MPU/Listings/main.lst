@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   MAIN                                                              06/14/2026 21:17:50 PAGE 1   
+C51 COMPILER V9.60.7.0   MAIN                                                              06/26/2026 13:36:53 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
@@ -41,29 +41,32 @@ line level    source
   31   1          uartInit();
   32   1          mpu6050Init();
   33   1          initT2();
-  34   1      
-  35   1          while (1) {
-  36   2              printf("%d,%d,%d\r\n", (int)roll, (int)pitch, (int)yaw);
-  37   2              delayMs(30);
-  38   2          }
-  39   1      }
-  40          
-  41          void t2ISR() interrupt 5
-  42          {
-  43   1          TF2H = 0;
-  44   1          mpu6050ReadAll(&AX, &AY, &AZ, &GX, &GY, &GZ);
-  45   1          mpu6050Filter(AX, AY, AZ, GX, GY, GZ, &roll, &pitch, &yaw);
-  46   1      }
+  34   1          
+  35   1          printf("=====TEST======\r \n");
+  36   1        
+  37   1          while (1) {
+  38   2              printf("RAW:%d,%d,%d | %d,%d,%d | F:%d,%d,%d\r\n", AX, AY, AZ, GX, GY, GZ, (int)roll, (int)pitch, 
+             -(int)yaw);
+  39   2              delayMs(30);
+  40   2          }
+  41   1      }
+  42          
+  43          void t2ISR() interrupt 5
+  44          {
+  45   1          TF2H = 0;
+  46   1          mpu6050ReadAll(&AX, &AY, &AZ, &GX, &GY, &GZ);
+  47   1          mpu6050Filter(AX, AY, AZ, GX, GY, GZ, &roll, &pitch, &yaw);
+  48   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    323    ----
-   CONSTANT SIZE    =     11    ----
+   CODE SIZE        =    383    ----
+   CONSTANT SIZE    =     58    ----
+C51 COMPILER V9.60.7.0   MAIN                                                              06/26/2026 13:36:53 PAGE 2   
+
    XDATA SIZE       =     24    ----
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
-C51 COMPILER V9.60.7.0   MAIN                                                              06/14/2026 21:17:50 PAGE 2   
-
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.

@@ -1,5 +1,16 @@
+/**
+ * main.c — BLE 5.0 蓝牙透传: MPU6050 → 手机
+ *
+ * 硬件 (仅4线):
+ *   BLE VCC → 3.3V    BLE GND → GND
+ *   BLE TXD → P0.5    BLE RXD → P0.4
+ *   MPU6050 SDA=P0.2  SCL=P0.3
+ *
+ * 手机端: BLE调试助手 → 连接 → 启用Notify → 收数据
+ */
+
 #include "sysinit.h"
-#include "uart.h"
+#include "bluetooth.h"
 #include "mpu6050.h"
 #include "stdio.h"
 #include "math.h"
@@ -28,19 +39,21 @@ static void initT2(void)
 void main(void)
 {
     sysInit();
-    uartInit();
+    btInit(115200);
     mpu6050Init();
     initT2();
-		
-    printf("=====TEST======\r \n");
-	
+
+    printf("=== BLE MPU6050 ===\r\n");
+
     while (1) {
-        printf("RAW:%d,%d,%d | %d,%d,%d | F:%d,%d,%d\r\n", AX, AY, AZ, GX, GY, GZ, (int)roll, (int)pitch, (int)yaw);
-        delayMs(30);
+        printf("A:%d,%d,%d G:%d,%d,%d R%d,P%d,Y%d\r\n",
+               AX, AY, AZ, GX, GY, GZ,
+               (int)roll, (int)pitch, (int)yaw);
+        delayMs(100);
     }
 }
 
-void t2ISR() interrupt 5
+void t2ISR(void) interrupt 5
 {
     TF2H = 0;
     mpu6050ReadAll(&AX, &AY, &AZ, &GX, &GY, &GZ);

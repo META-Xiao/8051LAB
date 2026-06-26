@@ -1,0 +1,6 @@
+".\Objects\main.obj",
+".\Objects\bluetooth.obj",
+".\Objects\sysinit.obj",
+".\Objects\uart.obj" 
+TO ".\Objects\Bluetooth" 
+PRINT(".\Listings\Bluetooth.m51") RAMSIZE(256) 
