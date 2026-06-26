@@ -8,9 +8,9 @@
 
 void main(void)
 {
-    uchar val;
+    uint val;
     uint mV;
-    uchar lastVal = 0xFF;
+    uint lastVal = 0xFFFF;
     uchar i;
 
     sysInit();
@@ -22,7 +22,7 @@ void main(void)
 
     while (1) {
         val = pcf8591ReadADC(1);
-        mV = (uint)val * 5000 / 255;
+        mV = (uint)((ulong)val * 5000UL / 255UL);
 
         if (val != lastVal) {
             printf("AIN1: %3u (%u.%03uV)\r\n",

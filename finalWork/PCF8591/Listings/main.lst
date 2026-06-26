@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   MAIN                                                              06/26/2026 21:12:18 PAGE 1   
+C51 COMPILER V9.60.7.0   MAIN                                                              06/26/2026 21:22:02 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
@@ -18,9 +18,9 @@ line level    source
    8          
    9          void main(void)
   10          {
-  11   1          uchar val;
+  11   1          uint val;
   12   1          uint mV;
-  13   1          uchar lastVal = 0xFF;
+  13   1          uint lastVal = 0xFFFF;
   14   1          uchar i;
   15   1      
   16   1          sysInit();
@@ -32,7 +32,7 @@ line level    source
   22   1      
   23   1          while (1) {
   24   2              val = pcf8591ReadADC(1);
-  25   2              mV = (uint)val * 5000 / 255;
+  25   2              mV = (uint)((ulong)val * 5000UL / 255UL);
   26   2      
   27   2              if (val != lastVal) {
   28   3                  printf("AIN1: %3u (%u.%03uV)\r\n",
@@ -51,11 +51,11 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    218    ----
+   CODE SIZE        =    238    ----
    CONSTANT SIZE    =     53    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =   ----       5
+   DATA SIZE        =   ----       7
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.
