@@ -5,8 +5,11 @@
 
 #include "sysinit.h"
 
+#ifndef _PCF8591_PIN_DEFINED_
 sbit PCF_SCL = P0^3;
 sbit PCF_SDA = P0^2;
+#define _PCF8591_PIN_DEFINED_
+#endif
 
 /**
  * 初始化 I2C 引脚 (开漏 + 上拉)

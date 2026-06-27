@@ -20,7 +20,7 @@ void oledDelayMs(uint ms)
  * 向 SSD1306 写一字节
  * dat: 数据, cmd: OLED_CMD(0)命令 / OLED_DATA(1)数据
  */
-static void oledWriteByte(uchar dat, uchar cmd)
+void oledWriteByte(uchar dat, uchar cmd)
 {
     uchar i;
 

@@ -53,6 +53,7 @@ void oledDisplayOff(void);
  * 在 (x,y) 显示 ASCII 字符 chr (8×16)
  * x: 0~127, y: 0~6 (页), 自动换行
  */
+void oledWriteByte(uchar dat, uchar cmd);
 void oledShowChar(uchar x, uchar y, uchar chr);
 
 /**
