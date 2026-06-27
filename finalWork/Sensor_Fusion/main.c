@@ -4,13 +4,14 @@
  * Key2: 切换 超声波->电压->温度   Key1: 温度下切换 ℃/℉
  */
 #include "config.h"
-#include "boot_bmp.h"
 
+/* ===== 状态 ===== */
 #define STATE_BOOT  0
 #define STATE_ULTRA 1
 #define STATE_ADC   2
 #define STATE_TEMP  3
 
+/* ===== 键盘 P2 ===== */
 static uchar code keyTable[16] = {
     0x77,0xB7,0xD7,0xE7, 0x7B,0xBB,0xDB,0xEB,
     0x7D,0xBD,0xDD,0xED, 0x7E,0xBE,0xDE,0xEE
@@ -33,9 +34,16 @@ static uchar keyScan(void)
 
 static void delayShort(void) { uint i; for (i = 0; i < 30000; i++); }
 
-/**
- * 在 (x,y) 以ASCII显示 val×100, 格式 XX.XX
- */
+/** 延时并轮询按键, 按Key2返回1提前退出 */
+static uchar delayPoll(uchar n)
+{
+    while (n--) {
+        delayShort();
+        if (keyScan() == 2) return 1;
+    }
+    return 0;
+}
+
 static void oledShowFloat(uchar x, uchar y, uint val)
 {
     uchar buf[7];
@@ -46,6 +54,24 @@ static void oledShowFloat(uchar x, uchar y, uint val)
     buf[4] = '0' + val % 10;
     buf[5] = 0;
     oledShowStr(x, y, buf);
+}
+
+/**
+ * 开机动画: "Welcome!" 打字机效果, 从左到右逐字出现
+ */
+static void bootAnim(void)
+{
+    uchar code *msg = "Welcome!";
+    uchar i, buf[10], j;
+
+    for (i = 0; msg[i]; i++) {
+        buf[i]   = msg[i];
+        buf[i+1] = 0;
+        oledShowStr(32, 3, buf);       /* 居中 8字×8px=64px, (128-64)/2=32 */
+        for ( j = 0; j<10; j++)delayShort();
+    }
+    delayShort();
+    delayShort();
 }
 
 void main(void)
@@ -64,9 +90,8 @@ void main(void)
     P2MDOUT  = 0x0F; P2 = 0xFF;
 
     /* ---- 开机动画 ---- */
-    oledDrawBMP(0, 0, 128, 8, bootBMP);
-    delayShort();
-    delayShort();
+    bootAnim();
+    oledClear();
     state   = STATE_ULTRA;
     refresh = 1;
 
@@ -77,14 +102,16 @@ void main(void)
             if (key == 2) {
                 state++;
                 if (state > STATE_TEMP) state = STATE_ULTRA;
-                refresh = 1;
+                refresh   = 1;
             }
             if (key == 1 && state == STATE_TEMP) {
                 fahrMode = !fahrMode;
                 refresh  = 1;
             }
+            lastKey = key;
+            while (keyScan()) {}  /* 等松开 */
+            lastKey = 0;          /* 复位, 允许下次再按 */
         }
-        lastKey = key;
 
         switch (state) {
 
@@ -131,12 +158,12 @@ void main(void)
 
         case STATE_TEMP:
             ds18b20Start();
-            { uchar d; for (d = 0; d < 20; d++) delayShort(); }
+            if (delayPoll(20)) { state = STATE_ULTRA; refresh = 1; break; }
             temp = ds18b20Read();                /* 始终为摄氏度×100 */
 
             /* 报警用摄氏度判定 */
-            if (temp > 3000) {
-                buzzerBeep(3000, 200);
+            if (temp > 3200) {
+                buzzerBeep(3200, 200);
                 { uint d; for (d = 0; d < 30000; d++); }
             }
 

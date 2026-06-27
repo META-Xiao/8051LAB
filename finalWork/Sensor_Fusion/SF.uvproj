@@ -436,11 +436,6 @@
               <FileType>5</FileType>
               <FilePath>..\lib\buzzer.h</FilePath>
             </File>
-            <File>
-              <FileName>boot_bmp.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\boot_bmp.h</FilePath>
-            </File>
           </Files>
         </Group>
       </Groups>
