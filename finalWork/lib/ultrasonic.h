@@ -10,8 +10,11 @@
 
 #include "sysinit.h"
 
+#ifndef _ULTRA_PIN_DEFINED_
 sbit TRIG = P0^0;
 sbit ECHO = P0^1;
+#define _ULTRA_PIN_DEFINED_
+#endif
 
 /* ===== API ===== */
 

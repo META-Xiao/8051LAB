@@ -10,7 +10,10 @@
 
 #include "sysinit.h"
 
+#ifndef _DS18B20_PIN_DEFINED_
 sbit DQ = P0^2;
+#define _DS18B20_PIN_DEFINED_
+#endif
 
 /* ===== API ===== */
 
