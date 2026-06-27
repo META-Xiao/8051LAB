@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   CHART                                                             06/27/2026 17:46:19 PAGE 1   
+C51 COMPILER V9.60.7.0   CHART                                                             06/27/2026 18:19:37 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE CHART
@@ -9,15 +9,15 @@ COMPILER INVOKED BY: D:\keilv5\C51\BIN\C51.EXE ..\lib\chart.c OPTIMIZE(8,SPEED) 
 line level    source
 
    1          /**
-   2           * chart.c — OLED 实时曲线图
-   3           *
-   4           * 在指定页面区域绘制 64 点柱状曲线, 128×N px, 自适应 Y 轴
-   5           */
-   6          #include "chart.h"
-   7          #include "oled7pin.h"
-   8          
-   9          #define BUF_SIZE 64
-  10          
+   2           * chart.c — OLED 柱状曲线图 (帧缓冲+原子传输+跳帧)
+   3           */
+   4          #include "chart.h"
+   5          #include "oled7pin.h"
+   6          
+   7          #define BUF_SIZE 64
+   8          #define MAX_COL  128
+   9          
+  10          static uchar xdata fb[MAX_COL * 7];    /* 帧缓冲 XDATA */
   11          static uchar xdata buf[BUF_SIZE];
   12          static uchar idx, y0, pages, pxH, yMax;
   13          
@@ -36,89 +36,92 @@ line level    source
   26   1          for (i = 0; i < BUF_SIZE; i++) buf[i] = 0;
   27   1      }
   28          
-  29          /** 清空图表区域 */
-  30          static void chartClear(void)
+  29          /* 帧缓冲画一列 */
+  30          static void fbCol(uchar x, uchar valPx)
   31          {
-  32   1          uchar y, x;
-  33   1          for (y = 0; y < pages; y++) {
-  34   2              oledWriteByte(0xB0 + y0 + y, 0);  /* set page */
-  35   2              oledWriteByte(0x00, 0);            /* col low */
-  36   2              oledWriteByte(0x10, 0);            /* col high */
-  37   2              for (x = 0; x < 128; x++)
-  38   2                  oledWriteByte(0x00, 1);
-  39   2          }
-  40   1      }
-  41          
-  42          /** 画一列: x 位置, 高 valPx 像素(0=底, pxH=满) */
-  43          static void chartCol(uchar x, uchar valPx)
-  44          {
-  45   1          uchar p;
-  46   1          int   barTop;
-  47   1      
-  48   1          barTop = (int)(y0 + pages) * 8 - (int)valPx;
-  49   1      
-  50   1          for (p = 0; p < pages; p++) {
-  51   2              int   pageTop = (int)(y0 + p) * 8;
-  52   2              int   pageBot = pageTop + 7;
-  53   2              uchar mask;
-  54   2      
-C51 COMPILER V9.60.7.0   CHART                                                             06/27/2026 17:46:19 PAGE 2   
+  32   1          uchar p;
+  33   1          int   barTop;
+  34   1          barTop = (int)(y0 + pages) * 8 - (int)valPx;
+  35   1          for (p = 0; p < pages; p++) {
+  36   2              int   pageTop = (int)(y0 + p) * 8;
+  37   2              int   pageBot = pageTop + 7;
+  38   2              uchar mask;
+  39   2              if (barTop > pageBot)      mask = 0x00;
+  40   2              else if (barTop <= pageTop) mask = 0xFF;
+  41   2              else                       mask = barMask[pageBot - barTop + 1];
+  42   2              fb[p * MAX_COL + x] = mask;
+  43   2          }
+  44   1      }
+  45          
+  46          static void fbClear(void)
+  47          {
+  48   1          uint i;
+  49   1          for (i = 0; i < (uint)pages * MAX_COL; i++) fb[i] = 0;
+  50   1      }
+  51          
+  52          /* 帧缓冲→OLED (关中断, 尽量原子) */
+  53          static void fbFlush(void)
+  54          {
+C51 COMPILER V9.60.7.0   CHART                                                             06/27/2026 18:19:37 PAGE 2   
 
-  55   2              if (barTop > pageBot)      mask = 0x00;
-  56   2              else if (barTop <= pageTop) mask = 0xFF;
-  57   2              else                       mask = barMask[pageBot - barTop + 1];
-  58   2      
-  59   2              oledWriteByte(0xB0 + y0 + p, 0);          /* 每页独立设地址 */
-  60   2              oledWriteByte(((x & 0xF0) >> 4) | 0x10, 0);
-  61   2              oledWriteByte((x & 0x0F) | 0x01, 0);
-  62   2              oledWriteByte(mask, 1);
-  63   2          }
-  64   1      }
-  65          
-  66          /** 重绘全部曲线 */
-  67          static void chartDraw(void)
-  68          {
-  69   1          uchar i;
-  70   1          chartClear();
-  71   1          for (i = 0; i < BUF_SIZE; i++) {
-  72   2              uchar v   = buf[(idx + i) & (BUF_SIZE - 1)];
-  73   2              uchar bar = (yMax > 0) ? (uchar)((uint)v * pxH / yMax) : 0;
-  74   2              if (bar > pxH) bar = pxH;
-  75   2              chartCol(i * 2,     bar);  /* 每bar 2px宽 */
-  76   2              chartCol(i * 2 + 1, bar);
-  77   2          }
-  78   1      }
-  79          
-  80          void chartReset(uchar newMax)
-  81          {
-  82   1          uchar i;
-  83   1          idx  = 0;
-  84   1          yMax = newMax ? newMax : 1;
-  85   1          for (i = 0; i < BUF_SIZE; i++) buf[i] = 0;
-  86   1          chartClear();
-  87   1      }
-  88          
-  89          void chartPush(uchar val)
-  90          {
-  91   1          uchar i;
-  92   1          buf[idx] = val;
-  93   1          idx = (idx + 1) & (BUF_SIZE - 1);
-  94   1      
-  95   1          yMax = 0;
-  96   1          for (i = 0; i < BUF_SIZE; i++)
-  97   1              if (buf[i] > yMax) yMax = buf[i];
-  98   1          if (yMax == 0) yMax = 1;
-  99   1      
- 100   1          chartDraw();
- 101   1      }
+  55   1          uchar p, savedEA;
+  56   1          uint  x;
+  57   1          savedEA = EA;  EA = 0;          /* 传输期间关中断防撕裂 */
+  58   1          for (p = 0; p < pages; p++) {
+  59   2              oledWriteByte(0xB0 + y0 + p, 0);
+  60   2              oledWriteByte(0x00, 0);
+  61   2              oledWriteByte(0x10, 0);
+  62   2              for (x = 0; x < MAX_COL; x++)
+  63   2                  oledWriteByte(fb[p * MAX_COL + x], 1);
+  64   2          }
+  65   1          EA = savedEA;
+  66   1      }
+  67          
+  68          static void chartDraw(void)
+  69          {
+  70   1          uchar i;
+  71   1          /* 不 fbClear! 帧缓冲保留上一帧, 新柱直接覆盖 */
+  72   1          for (i = 0; i < BUF_SIZE; i++) {
+  73   2              uchar v   = buf[(idx + i) & (BUF_SIZE - 1)];
+  74   2              uchar bar = (yMax > 0) ? (uchar)((uint)v * pxH / yMax) : 0;
+  75   2              if (bar > pxH) bar = pxH;
+  76   2              fbCol(i * 2,     bar);
+  77   2              fbCol(i * 2 + 1, bar);
+  78   2          }
+  79   1          fbFlush();
+  80   1      }
+  81          
+  82          void chartReset(uchar newMax)
+  83          {
+  84   1          uchar i;
+  85   1          idx  = 0;
+  86   1          yMax = newMax ? newMax : 1;
+  87   1          for (i = 0; i < BUF_SIZE; i++) buf[i] = 0;
+  88   1          fbClear();
+  89   1          fbFlush();
+  90   1      }
+  91          
+  92          void chartPush(uchar val)
+  93          {
+  94   1          uchar i;
+  95   1          buf[idx] = val;
+  96   1          idx = (idx + 1) & (BUF_SIZE - 1);
+  97   1      
+  98   1          yMax = 0;
+  99   1          for (i = 0; i < BUF_SIZE; i++)
+ 100   1              if (buf[i] > yMax) yMax = buf[i];
+ 101   1          if (yMax == 0) yMax = 1;
+ 102   1      
+ 103   1          chartDraw();
+ 104   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    466    ----
+   CODE SIZE        =    531    ----
    CONSTANT SIZE    =      9    ----
-   XDATA SIZE       =     64    ----
+   XDATA SIZE       =    960    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =      5      14
+   DATA SIZE        =      5      13
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.

@@ -109,7 +109,6 @@ void main(void)
                 refresh   = 1;
                 if (state == STATE_ULTRA) chartReset(200);
                 if (state == STATE_ADC)   chartReset(255);
-                if (state == STATE_TEMP)  chartReset(250);
             }
             if (key == 1 && state == STATE_TEMP) {
                 fahrMode = !fahrMode;
@@ -173,14 +172,13 @@ void main(void)
                 buzzerBeep(2500, 60);
                 delayPoll(2);
             }
-            chartPush((uchar)(temp / 20));   /* 推原始℃值到曲线 */
             if (fahrMode)
                 temp = (uint)((ulong)temp * 9UL / 5UL) + 3200UL;
             if (temp != lastTemp) { refresh = 1; lastTemp = temp; }
             if (refresh) {
                 oledClear();
-                oledShowStr(0, 0, fahrMode ? "T(F):" : "T(C):");
-                oledShowFloat(48, 0, temp);
+                oledShowStr(0, 0, fahrMode ? "Temp(F):" : "Temp(C):");
+                oledShowFloat(0, 2, temp);
                 refresh = 0;
             }
             delayPoll(3);
