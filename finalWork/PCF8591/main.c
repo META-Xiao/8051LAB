@@ -1,5 +1,6 @@
 /* PCF8591 数字电压表
-   I2C: P0.3(SCL) P0.2(SDA), AIN1 模拟输入 */
+   I2C: P0.3(SCL) P0.2(SDA), AIN1 模拟输入
+*/
 #include "sysinit.h"
 #include "uart.h"
 #include "pcf8591.h"
