@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   ULTRA                                                             06/27/2026 17:01:20 PAGE 1   
+C51 COMPILER V9.60.7.0   ULTRA                                                             06/27/2026 17:05:43 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE ULTRA
@@ -62,7 +62,7 @@ line level    source
   52   1          EA = savedEA;
   53   1      
   54   1          ticks = (TH0 << 8) | TL0;
-C51 COMPILER V9.60.7.0   ULTRA                                                             06/27/2026 17:01:20 PAGE 2   
+C51 COMPILER V9.60.7.0   ULTRA                                                             06/27/2026 17:05:43 PAGE 2   
 
   55   1          return (uint)((ulong)ticks / 120UL);
   56   1      }

@@ -11,7 +11,6 @@
 #define STATE_ADC   2
 #define STATE_TEMP  3
 
-/* ===== 键盘 P2 ===== */
 static uchar code keyTable[16] = {
     0x77,0xB7,0xD7,0xE7, 0x7B,0xBB,0xDB,0xEB,
     0x7D,0xBD,0xDD,0xED, 0x7E,0xBE,0xDE,0xEE
@@ -59,7 +58,7 @@ static void oledShowFloat(uchar x, uchar y, uint val)
 }
 
 /**
- * 开机动画: "Welcome!" 打字机效果, 从左到右逐字出现
+ * 开机动画
  */
 static void bootAnim(void)
 {
@@ -69,7 +68,7 @@ static void bootAnim(void)
     for (i = 0; msg[i]; i++) {
         buf[i]   = msg[i];
         buf[i+1] = 0;
-        oledShowStr(32, 3, buf);       /* 居中 8字×8px=64px, (128-64)/2=32 */
+        oledShowStr(32, 3, buf);
         for ( j = 0; j<10; j++)delayShort();
     }
     delayShort();
@@ -131,11 +130,11 @@ void main(void)
                 }
                 refresh = 0;
             }
-            /* <80cm 距离越近越急促 */
+            /* <80cm 嘀嘀声, 距离越近越急促 */
             if (dist < 80) {
                 uchar n;
-                buzzerBeep(500U + (80U - dist) * 25U, 50);
-                for (n = dist; n; n--) delayPoll(1);
+                buzzerBeep(2500, 40);
+                for (n = dist / 4 + 1; n; n--) delayPoll(1);
             } else {
                 delayPoll(3);
             }
@@ -167,8 +166,10 @@ void main(void)
             temp = ds18b20Read();
 
             if (temp > 3200) {
-                buzzerBeep(3200, 200);
-                delayPoll(2);              /* 短延时+按键检测 */
+                buzzerBeep(2500, 60);   /* 嘀 */
+                { uint d; for(d=0;d<12000;d++); }
+                buzzerBeep(2500, 60);   /* 嘀 */
+                delayPoll(2);
             }
 
             if (fahrMode)
