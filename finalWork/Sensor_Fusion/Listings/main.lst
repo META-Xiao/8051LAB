@@ -1,0 +1,186 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              06/27/2026 16:25:16 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\keilv5\C51\BIN\C51.EXE main.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(..\lib) DEBUG OBJECTEXTEND P
+                    -RINT(.\Listings\main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          /**
+   2           * sensorFusion — 多传感器融合
+   3           *
+   4           * Key2: 切换 超声波->电压->温度   Key1: 温度下切换 ℃/℉
+   5           */
+   6          #include "config.h"
+   7          #include "boot_bmp.h"
+   8          
+   9          #define STATE_BOOT  0
+  10          #define STATE_ULTRA 1
+  11          #define STATE_ADC   2
+  12          #define STATE_TEMP  3
+  13          
+  14          static uchar code keyTable[16] = {
+  15              0x77,0xB7,0xD7,0xE7, 0x7B,0xBB,0xDB,0xEB,
+  16              0x7D,0xBD,0xDD,0xED, 0x7E,0xBE,0xDE,0xEE
+  17          };
+  18          
+  19          static uchar keyScan(void)
+  20          {
+  21   1          uchar s1, s2, kc, j;
+  22   1          P2 = 0xF0; s1 = P2;
+  23   1          if ((s1 & 0xF0) == 0xF0) return 0;
+  24   1          { uint d; for (d = 0; d < 6000; d++); }
+  25   1          P2 = 0xF0; s1 = P2;
+  26   1          if ((s1 & 0xF0) == 0xF0) return 0;
+  27   1          P2 = 0x0F; s2 = P2;
+  28   1          kc = s1 | s2;
+  29   1          for (j = 0; j < 16; j++)
+  30   1              if (kc == keyTable[j]) return j + 1;
+  31   1          return 0;
+  32   1      }
+  33          
+  34          static void delayShort(void) { uint i; for (i = 0; i < 30000; i++); }
+  35          
+  36          /**
+  37           * 在 (x,y) 以ASCII显示 val×100, 格式 XX.XX
+  38           */
+  39          static void oledShowFloat(uchar x, uchar y, uint val)
+  40          {
+  41   1          uchar buf[7];
+  42   1          buf[0] = '0' + (val / 1000) % 10;
+  43   1          buf[1] = '0' + (val / 100) % 10;
+  44   1          buf[2] = '.';
+  45   1          buf[3] = '0' + (val / 10) % 10;
+  46   1          buf[4] = '0' + val % 10;
+  47   1          buf[5] = 0;
+  48   1          oledShowStr(x, y, buf);
+  49   1      }
+  50          
+  51          void main(void)
+  52          {
+  53   1          uchar state  = STATE_BOOT;
+  54   1          uchar lastKey = 0, key, fahrMode = 0, refresh = 1;
+C51 COMPILER V9.60.7.0   MAIN                                                              06/27/2026 16:25:16 PAGE 2   
+
+  55   1          uint  dist, volt, temp, lastDist = 0xFFFF, lastVolt = 0xFFFF, lastTemp = 0xFFFF;
+  56   1      
+  57   1          sysInit();
+  58   1          oledInit();
+  59   1          buzzerInit();
+  60   1          ultraInit();
+  61   1          ds18b20Init();
+  62   1          pcf8591Init();
+  63   1          P0MDOUT |= 0x40;  /* P0.6(TRIG)推挽, ultraInit只设了旧的P0.0 */
+  64   1          P2MDOUT  = 0x0F; P2 = 0xFF;
+  65   1      
+  66   1          /* ---- 开机动画 ---- */
+  67   1          oledDrawBMP(0, 0, 128, 8, bootBMP);
+  68   1          delayShort();
+  69   1          delayShort();
+  70   1          state   = STATE_ULTRA;
+  71   1          refresh = 1;
+  72   1      
+  73   1          while (1)
+  74   1          {
+  75   2              key = keyScan();
+  76   2              if (key && key != lastKey) {
+  77   3                  if (key == 2) {
+  78   4                      state++;
+  79   4                      if (state > STATE_TEMP) state = STATE_ULTRA;
+  80   4                      refresh = 1;
+  81   4                  }
+  82   3                  if (key == 1 && state == STATE_TEMP) {
+  83   4                      fahrMode = !fahrMode;
+  84   4                      refresh  = 1;
+  85   4                  }
+  86   3              }
+  87   2              lastKey = key;
+  88   2      
+  89   2              switch (state) {
+  90   3      
+  91   3              case STATE_ULTRA:
+  92   3                  dist = ultraRead();
+  93   3                  if (dist != lastDist) { refresh = 1; lastDist = dist; }
+  94   3                  if (refresh) {
+  95   4                      oledClear();
+  96   4                      oledShowStr(0, 0, "Distance:");
+  97   4                      if (dist < 400) {
+  98   5                          oledShowNum(0, 2, dist, 3, 16);
+  99   5                          oledShowStr(32, 2, "cm");
+ 100   5                      } else {
+ 101   5                          oledShowStr(0, 2, "Out of range");
+ 102   5                      }
+ 103   4                      refresh = 0;
+ 104   4                  }
+ 105   3                  /* <80cm 距离越近越急促 */
+ 106   3                  if (dist < 80) {
+ 107   4                      uint freq, n;
+ 108   4                      freq = 500U + (80U - dist) * 25U;
+ 109   4                      buzzerBeep(freq, 50);
+ 110   4                      n = dist;
+ 111   4                      while (n--) {
+ 112   5                          uint d; for (d = 0; d < 1500; d++);
+ 113   5                      }
+ 114   4                  } else {
+ 115   4                      uint d; for (d = 0; d < 60000; d++);
+ 116   4                  }
+C51 COMPILER V9.60.7.0   MAIN                                                              06/27/2026 16:25:16 PAGE 3   
+
+ 117   3                  break;
+ 118   3      
+ 119   3              case STATE_ADC:
+ 120   3                  volt = (uint)pcf8591ReadADC(1) * 5000UL / 255UL;
+ 121   3                  if (volt != lastVolt) { refresh = 1; lastVolt = volt; }
+ 122   3                  if (refresh) {
+ 123   4                      oledClear();
+ 124   4                      oledShowStr(0, 0, "ADC Voltage:");
+ 125   4                      oledShowFloat(0, 2, volt / 10);
+ 126   4                      oledShowStr(56, 2, "V");
+ 127   4                      refresh = 0;
+ 128   4                  }
+ 129   3                  { uint d; for (d = 0; d < 60000; d++); }
+ 130   3                  break;
+ 131   3      
+ 132   3              case STATE_TEMP:
+ 133   3                  ds18b20Start();
+ 134   3                  { uchar d; for (d = 0; d < 20; d++) delayShort(); }
+ 135   3                  temp = ds18b20Read();                /* 始终为摄氏度×100 */
+ 136   3      
+ 137   3                  /* 报警用摄氏度判定 */
+ 138   3                  if (temp > 3000) {
+ 139   4                      buzzerBeep(3000, 200);
+ 140   4                      { uint d; for (d = 0; d < 30000; d++); }
+ 141   4                  }
+ 142   3      
+ 143   3                  /* 显示时再转换单位 */
+ 144   3                  if (fahrMode) {
+ 145   4                      temp = (uint)((ulong)temp * 9UL / 5UL) + 3200UL;
+ 146   4                  }
+ 147   3                  if (temp != lastTemp) { refresh = 1; lastTemp = temp; }
+ 148   3                  if (refresh) {
+ 149   4                      oledClear();
+ 150   4                      oledShowStr(0, 0, fahrMode ? "Temp(F):" : "Temp(C):");
+ 151   4                      oledShowFloat(0, 2, temp);
+ 152   4                      refresh = 0;
+ 153   4                  }
+ 154   3                  { uint d; for (d = 0; d < 60000; d++); }
+ 155   3                  break;
+ 156   3              }
+ 157   2          }
+ 158   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1163    ----
+   CONSTANT SIZE    =   1099    ----
+   XDATA SIZE       =   ----      33
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
