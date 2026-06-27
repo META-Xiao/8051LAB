@@ -34,12 +34,14 @@ static uchar keyScan(void)
 
 static void delayShort(void) { uint i; for (i = 0; i < 30000; i++); }
 
-/** 延时并轮询按键, 按Key2返回1提前退出 */
+/** 延时并轮询所有按键, 返回按键值(0=超时) */
 static uchar delayPoll(uchar n)
 {
+    uchar k;
     while (n--) {
         delayShort();
-        if (keyScan() == 2) return 1;
+        k = keyScan();
+        if (k) return k;
     }
     return 0;
 }
@@ -131,15 +133,11 @@ void main(void)
             }
             /* <80cm 距离越近越急促 */
             if (dist < 80) {
-                uint freq, n;
-                freq = 500U + (80U - dist) * 25U;
-                buzzerBeep(freq, 50);
-                n = dist;
-                while (n--) {
-                    uint d; for (d = 0; d < 1500; d++);
-                }
+                uchar n;
+                buzzerBeep(500U + (80U - dist) * 25U, 50);
+                for (n = dist; n; n--) delayPoll(1);
             } else {
-                uint d; for (d = 0; d < 60000; d++);
+                delayPoll(3);
             }
             break;
 
@@ -153,24 +151,28 @@ void main(void)
                 oledShowStr(56, 2, "V");
                 refresh = 0;
             }
-            { uint d; for (d = 0; d < 60000; d++); }
+            delayPoll(3);
             break;
 
         case STATE_TEMP:
             ds18b20Start();
-            if (delayPoll(20)) { state = STATE_ULTRA; refresh = 1; break; }
-            temp = ds18b20Read();                /* 始终为摄氏度×100 */
+            if (delayPoll(20) == 2) {
+                state   = STATE_ULTRA;
+                refresh = 1;
+                lastKey = 2;
+                while (keyScan()) {}  /* 等松开, 防主循环重复处理 */
+                lastKey = 0;
+                break;
+            }
+            temp = ds18b20Read();
 
-            /* 报警用摄氏度判定 */
             if (temp > 3200) {
                 buzzerBeep(3200, 200);
-                { uint d; for (d = 0; d < 30000; d++); }
+                delayPoll(2);              /* 短延时+按键检测 */
             }
 
-            /* 显示时再转换单位 */
-            if (fahrMode) {
+            if (fahrMode)
                 temp = (uint)((ulong)temp * 9UL / 5UL) + 3200UL;
-            }
             if (temp != lastTemp) { refresh = 1; lastTemp = temp; }
             if (refresh) {
                 oledClear();
@@ -178,7 +180,7 @@ void main(void)
                 oledShowFloat(0, 2, temp);
                 refresh = 0;
             }
-            { uint d; for (d = 0; d < 60000; d++); }
+            delayPoll(3);
             break;
         }
     }
