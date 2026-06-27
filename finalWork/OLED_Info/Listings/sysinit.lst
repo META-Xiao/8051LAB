@@ -1,0 +1,61 @@
+C51 COMPILER V9.60.7.0   SYSINIT                                                           06/27/2026 15:10:25 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE SYSINIT
+OBJECT MODULE PLACED IN .\Objects\sysinit.obj
+COMPILER INVOKED BY: D:\keilv5\C51\BIN\C51.EXE ..\lib\sysinit.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\lib) DEBUG OBJECTEXTE
+                    -ND PRINT(.\Listings\sysinit.lst) TABS(2) OBJECT(.\Objects\sysinit.obj)
+
+line level    source
+
+   1          #include "sysinit.h"
+   2          
+   3          void sysPcaInit(void)
+   4          {
+   5   1          PCA0MD &= ~0x40;
+   6   1          PCA0MD  = 0x00;
+   7   1      }
+   8          
+   9          void sysTimerInit(void)
+  10          {
+  11   1          TCON  = 0x50;
+  12   1          TMOD  = 0x11;
+  13   1      }
+  14          
+  15          void sysPortInit(void)
+  16          {
+  17   1          XBR1 = 0x40;
+  18   1      }
+  19          
+  20          void sysOscInit(void)
+  21          {
+  22   1          OSCICN = 0x87;
+  23   1      }
+  24          
+  25          void sysIntInit(void)
+  26          {
+  27   1          IE = 0x80;
+  28   1      }
+  29          
+  30          void sysInit(void)
+  31          {
+  32   1          sysPcaInit();
+  33   1          sysTimerInit();
+  34   1          sysPortInit();
+  35   1          sysOscInit();
+  36   1          sysIntInit();
+  37   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     41    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

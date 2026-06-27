@@ -1,0 +1,5 @@
+".\Objects\main.obj",
+".\Objects\oled7pin.obj",
+".\Objects\sysinit.obj" 
+TO ".\Objects\poem" 
+PRINT(".\Listings\poem.m51") RAMSIZE(256) 

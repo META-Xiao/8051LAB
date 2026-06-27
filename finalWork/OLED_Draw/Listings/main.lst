@@ -1,0 +1,66 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              06/27/2026 15:25:58 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\keilv5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\lib) DEBUG OBJECTEXTEND PRINT(.
+                    -\Listings\main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          /**
+   2           * OLED_Draw — 3D 旋转立方体线框
+   3           *
+   4           * CUBE_STATIC: 1=静态第一帧  0=24帧循环动画
+   5           * Keil: 添加 oled7pin.c, 包含路径 ../lib
+   6           */
+   7          #define CUBE_STATIC 0   /* 改0为动态旋转 */
+   8          
+   9          #include "sysinit.h"
+  10          #include "oled7pin.h"
+  11          #include "cube_bmp.h"
+  12          
+  13          #if CUBE_STATIC
+                void main(void)
+                {
+                    sysInit();
+                    oledInit();
+                    oledDrawBMP(0, 0, 128, 8, cubeFrames[0]);
+                    while (1);
+                }
+              #else
+  22            /* 动态: 循环24帧 */
+  23            static void cubeDelay(void)
+  24            {
+  25   1            uint i;
+  26   1            for (i = 0; i < 45000; i++);   /* ~200ms @24.5MHz */
+  27   1        }
+  28          
+  29            void main(void)
+  30            {
+  31   1            uchar f = 0;
+  32   1            sysInit();
+  33   1            oledInit();
+  34   1      
+  35   1            while (1) {
+  36   2                oledDrawBMP(0, 0, 128, 8, cubeFrames[f]);
+  37   2                cubeDelay();
+  38   2                f++;
+  39   2                if (f >= CUBE_FRAMES) f = 0;
+  40   2            }
+  41   1        }
+  42          #endif
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     78    ----
+   CONSTANT SIZE    =  24576    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     48       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
