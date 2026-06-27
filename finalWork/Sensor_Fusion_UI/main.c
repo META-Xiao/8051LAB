@@ -107,7 +107,9 @@ void main(void)
                 state++;
                 if (state > STATE_TEMP) state = STATE_ULTRA;
                 refresh   = 1;
-                if (state == STATE_ADC) chartReset(255);  /* 进入ADC时清曲线 */
+                if (state == STATE_ULTRA) chartReset(200);
+                if (state == STATE_ADC)   chartReset(255);
+                if (state == STATE_TEMP)  chartReset(250);
             }
             if (key == 1 && state == STATE_TEMP) {
                 fahrMode = !fahrMode;
@@ -125,11 +127,12 @@ void main(void)
             if (dist != lastDist) { refresh = 1; lastDist = dist; }
             if (refresh) {
                 oledClear();
-                oledShowStr(0, 0, "Distance:");
-                oledShowNum(0, 2, dist, 3, 16);
-                oledShowStr(32, 2, "cm");
+                oledShowStr(0, 0, "Dist:");
+                oledShowNum(40, 0, dist, 3, 16);
+                oledShowStr(72, 0, "cm");
                 refresh = 0;
             }
+            chartPush(dist < 200 ? (uchar)(dist/2) : 100);
             if (dist < 80) {
                 uchar n;
                 buzzerBeep(2500, 40);
@@ -170,13 +173,14 @@ void main(void)
                 buzzerBeep(2500, 60);
                 delayPoll(2);
             }
+            chartPush((uchar)(temp / 20));   /* 推原始℃值到曲线 */
             if (fahrMode)
                 temp = (uint)((ulong)temp * 9UL / 5UL) + 3200UL;
             if (temp != lastTemp) { refresh = 1; lastTemp = temp; }
             if (refresh) {
                 oledClear();
-                oledShowStr(0, 0, fahrMode ? "Temp(F):" : "Temp(C):");
-                oledShowFloat(0, 2, temp);
+                oledShowStr(0, 0, fahrMode ? "T(F):" : "T(C):");
+                oledShowFloat(48, 0, temp);
                 refresh = 0;
             }
             delayPoll(3);

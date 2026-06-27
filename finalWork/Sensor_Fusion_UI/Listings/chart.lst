@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   CHART                                                             06/27/2026 17:44:15 PAGE 1   
+C51 COMPILER V9.60.7.0   CHART                                                             06/27/2026 17:46:19 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE CHART
@@ -62,7 +62,7 @@ line level    source
   52   2              int   pageBot = pageTop + 7;
   53   2              uchar mask;
   54   2      
-C51 COMPILER V9.60.7.0   CHART                                                             06/27/2026 17:44:15 PAGE 2   
+C51 COMPILER V9.60.7.0   CHART                                                             06/27/2026 17:46:19 PAGE 2   
 
   55   2              if (barTop > pageBot)      mask = 0x00;
   56   2              else if (barTop <= pageTop) mask = 0xFF;

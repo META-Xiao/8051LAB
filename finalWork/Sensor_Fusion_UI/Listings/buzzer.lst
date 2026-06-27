@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   BUZZER                                                            06/27/2026 17:44:15 PAGE 1   
+C51 COMPILER V9.60.7.0   BUZZER                                                            06/27/2026 17:46:19 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE BUZZER
@@ -62,7 +62,7 @@ line level    source
   52   2          }
   53   1      
   54   1          halfUs = 500000UL / freqHz;
-C51 COMPILER V9.60.7.0   BUZZER                                                            06/27/2026 17:44:15 PAGE 2   
+C51 COMPILER V9.60.7.0   BUZZER                                                            06/27/2026 17:46:19 PAGE 2   
 
   55   1          if (halfUs < 10)  halfUs = 10;
   56   1          if (halfUs > 25000) halfUs = 25000;
@@ -126,7 +126,7 @@ line level    source
  114   1      }
  115          
  116          void buzzerStop(void)
-C51 COMPILER V9.60.7.0   BUZZER                                                            06/27/2026 17:44:15 PAGE 3   
+C51 COMPILER V9.60.7.0   BUZZER                                                            06/27/2026 17:46:19 PAGE 3   
 
  117          {
  118   1          nbActive = 0;
