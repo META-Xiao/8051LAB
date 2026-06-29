@@ -11,6 +11,15 @@ sbit PCF_SDA = P0^2;
 #define _PCF8591_PIN_DEFINED_
 #endif
 
+/* 端口配置: SCL=推挽, SDA=开漏+输入 */
+#ifndef _PCF8591_CFG
+#define _PCF8591_CFG() do { \
+    P0MDOUT |=  0x08;        \
+    P0MDOUT &= ~0x04;        \
+    P0MDIN  |=  0x0C;        \
+} while(0)
+#endif
+
 /**
  * 初始化 I2C 引脚 (开漏 + 上拉)
  */

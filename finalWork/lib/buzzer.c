@@ -18,7 +18,7 @@ static uchar  nbToneCnt;      /* 响阶段内的翻转计数               */
 
 void buzzerInit(void)
 {
-    P1MDOUT |= 0x80;
+    _BUZZER_CFG();
     BUZZER_PIN = 0;
 }
 

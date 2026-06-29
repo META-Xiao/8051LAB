@@ -18,6 +18,15 @@ sbit SEG_DIGIT2 = P1^2;
 sbit SEG_DIGIT3 = P1^3;
 #define _SEG_PIN_DEFINED_
 #endif
+
+/* 端口配置: 位选推挽, 段选推挽 */
+#ifndef _SEG_CFG
+#define _SEG_CFG() do { \
+    P1MDOUT |= 0x0F;      \
+    P2MDOUT  = 0xFF;      \
+} while(0)
+#endif
+
 #define SEG_DIGIT_COUNT 4
 
 /* ===== API ===== */

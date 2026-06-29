@@ -8,6 +8,14 @@
 
 #include "sysinit.h"
 
+/* 端口配置: P0.0 模拟输入 */
+#ifndef _DAC_CFG
+#define _DAC_CFG() do { \
+    P0MDIN &= ~0x01;      \
+    P0SKIP |=  0x01;      \
+} while(0)
+#endif
+
 #define DAC_SINE_POINTS 256
 
 /**

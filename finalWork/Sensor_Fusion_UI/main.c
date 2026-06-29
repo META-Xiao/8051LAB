@@ -88,11 +88,9 @@ void main(void)
     ultraInit();
     ds18b20Init();
     pcf8591Init();
-    P0MDOUT |= 0x40;
     P2MDOUT  = 0x0F; P2 = 0xFF;
     chartInit(2, 6, 1);      /* 初始占位, 进入状态后 chartReset 覆盖 */
 
-    /* ---- 开机动画 ---- */
     bootAnim();
     oledClear();
     state   = STATE_ULTRA;

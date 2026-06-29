@@ -20,6 +20,28 @@ sbit DQ = P0^5;
 sbit PCF_SCL = P1^1;
 sbit PCF_SDA = P1^0;
 
+/* 
+覆盖端口配置
+TRIG=P0.6推挽, ECHO=P0.7输入 
+*/
+#undef  _ULTRA_CFG
+#define _ULTRA_CFG() do { \
+    P0MDOUT |=  0x40;      \
+    P0MDOUT &= ~0x80;      \
+    P0MDIN  |=  0x80;      \
+} while(0)
+
+/* 
+覆盖端口配置
+SCL=P1.1推挽, SDA=P1.0开漏
+*/
+#undef  _PCF8591_CFG
+#define _PCF8591_CFG() do { \
+    P1MDOUT |=  0x02;        \
+    P1MDOUT &= ~0x01;        \
+    P1MDIN  |=  0x03;        \
+} while(0)
+
 /* ===== 引入库 ===== */
 #include "oled7pin.h"
 #include "ultrasonic.h"

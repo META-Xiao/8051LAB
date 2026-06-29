@@ -16,6 +16,11 @@ sbit BUZZER_PIN = P1^7;
 #define _BUZZER_PIN_DEFINED_
 #endif
 
+/* 端口配置: 推挽输出 */
+#ifndef _BUZZER_CFG
+#define _BUZZER_CFG() do { P1MDOUT |= 0x80; } while(0)
+#endif
+
 /* ===== 阻塞 API（简单场景） ===== */
 void buzzerInit(void);
 void buzzerBeep(uint freqHz, uint durMs);

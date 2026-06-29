@@ -40,8 +40,7 @@ const uint code dacSineTable[DAC_SINE_POINTS] = {
 void dacInit(void)
 {
     REF0CN  = 0x0A;
-    P0MDIN &= ~0x01;
-    P0SKIP |=  0x01;
+    _DAC_CFG();
     IDA0CN  = 0xF4;
 }
 

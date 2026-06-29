@@ -16,6 +16,15 @@ sbit ECHO = P0^1;
 #define _ULTRA_PIN_DEFINED_
 #endif
 
+/* 端口配置: TRIG=推挽, ECHO=输入上拉 */
+#ifndef _ULTRA_CFG
+#define _ULTRA_CFG() do { \
+    P0MDOUT |=  0x01;      \
+    P0MDOUT &= ~0x02;      \
+    P0MDIN  |=  0x02;      \
+} while(0)
+#endif
+
 /* ===== API ===== */
 
 /* 初始化引脚，Trig 拉低 */

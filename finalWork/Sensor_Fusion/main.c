@@ -87,7 +87,6 @@ void main(void)
     ultraInit();
     ds18b20Init();
     pcf8591Init();
-    P0MDOUT |= 0x40; 
     P2MDOUT  = 0x0F; P2 = 0xFF;
 
     /* ---- 开机动画 ---- */

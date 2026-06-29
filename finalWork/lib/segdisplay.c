@@ -18,8 +18,7 @@ static uchar scanIdx = 0;
 
 void segInit(void)
 {
-    P1MDOUT |= 0x0F;
-    P2MDOUT  = 0xFF;
+    _SEG_CFG();
     SEG_DIGIT0 = 1;
     SEG_DIGIT1 = 1;
     SEG_DIGIT2 = 1;

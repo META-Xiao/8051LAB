@@ -24,7 +24,7 @@ static void ultraDelayUs(uint us)
 
 void ultraInit(void)
 {
-    P0MDOUT |= 0x01;
+    _ULTRA_CFG();
     TRIG = 0;
 }
 

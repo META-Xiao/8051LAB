@@ -15,6 +15,15 @@ sbit SCL = P0^3;
 #define _MPU6050_PIN_DEFINED_
 #endif
 
+/* 端口配置: SCL=推挽, SDA=开漏+输入 */
+#ifndef _MPU6050_CFG
+#define _MPU6050_CFG() do { \
+    P0MDOUT |=  0x08;        \
+    P0MDOUT &= ~0x04;        \
+    P0MDIN  |=  0x0C;        \
+} while(0)
+#endif
+
 /* 互补滤波参数 (按需修改) */
 #define FILTER_ALPHA    0.001
 #define GYRO_OFFSET_X   19

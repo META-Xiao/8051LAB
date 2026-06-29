@@ -79,9 +79,7 @@ static void writeReg(uchar reg, uchar dat)
 
 void mpu6050Init(void)
 {
-    P0MDOUT |= 0x08;
-    P0MDOUT &= ~0x04;
-    P0MDIN  |= 0x0C;
+    _MPU6050_CFG();
     SCL = 1; SDA = 1;
 
     writeReg(REG_PWR_MGMT_1,  0x01);

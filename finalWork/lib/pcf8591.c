@@ -65,9 +65,7 @@ static void i2cSendAck(uchar ack)
 
 void pcf8591Init(void)
 {
-    P0MDOUT |=  0x08;
-    P0MDOUT &= ~0x04;
-    P0MDIN  |=  0x0C;
+    _PCF8591_CFG();
     PCF_SCL = 1;
     PCF_SDA = 1;
 }
