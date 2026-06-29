@@ -1,4 +1,4 @@
-#include "segdisplay.h"
+#include "config.h"
 #include "intrins.h"
 
 static uchar code segTable[10] = {

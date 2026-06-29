@@ -1,8 +1,7 @@
 /**
  * OLED_Info — 班级学号 (8px间距, 紧凑显示)
  */
-#include "sysinit.h"
-#include "oled7pin.h"
+#include "config.h"
 
 enum {
     CN_2=0, CN_4=1, CN_I=2, CN_C=3, CN_1=4, CN_SP=5,

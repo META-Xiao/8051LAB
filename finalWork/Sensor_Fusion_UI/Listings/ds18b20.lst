@@ -1,10 +1,10 @@
-C51 COMPILER V9.60.7.0   DS18B20                                                           06/27/2026 18:19:37 PAGE 1   
+C51 COMPILER V9.60.7.0   DS18B20                                                           06/29/2026 15:51:41 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE DS18B20
 OBJECT MODULE PLACED IN .\Objects\ds18b20.obj
-COMPILER INVOKED BY: D:\keilv5\C51\BIN\C51.EXE ds18b20.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\lib) DEBUG OBJECTEXTEND PRIN
-                    -T(.\Listings\ds18b20.lst) TABS(2) OBJECT(.\Objects\ds18b20.obj)
+COMPILER INVOKED BY: D:\keilv5\C51\BIN\C51.EXE ..\lib\ds18b20.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\lib) DEBUG OBJECTEXTE
+                    -ND PRINT(.\Listings\ds18b20.lst) TABS(2) OBJECT(.\Objects\ds18b20.obj)
 
 line level    source
 
@@ -15,120 +15,119 @@ line level    source
    5           */
    6          
    7          #include "config.h"
-   8          #include "intrins.h"
-   9          
-  10          /* ===== 内部延时 ===== */
-  11          static void delay(uint n)
-  12          {
-  13   1          while (n--) { _nop_(); _nop_(); }
-  14   1      }
-  15          
-  16          static void delay10us(uchar n)
-  17          {
-  18   1          uchar i;
-  19   1          for (i = 0; i < n; i++) delay(18);
-  20   1      }
-  21          
-  22          /* ===== 1-Wire 复位 ===== */
-  23          static uchar owReset(void)
-  24          {
-  25   1          uchar presence;
-  26   1          DQ = 0;
-  27   1          delay10us(50);
-  28   1          DQ = 1;
-  29   1          delay10us(5);
-  30   1          presence = DQ;
-  31   1          delay10us(50);
-  32   1          return presence;
-  33   1      }
-  34          
-  35          /* ===== 1-Wire 写字节 ===== */
-  36          static void owWrite(uchar dat)
-  37          {
-  38   1          uchar i;
-  39   1          for (i = 0; i < 8; i++) {
-  40   2              DQ = 0;
-  41   2              delay(2);
-  42   2              DQ = dat & 0x01;
-  43   2              delay10us(6);
-  44   2              DQ = 1;
-  45   2              dat >>= 1;
-  46   2              delay(2);
-  47   2          }
-  48   1      }
-  49          
-  50          /* ===== 1-Wire 读字节 ===== */
-  51          static uchar owRead(void)
-  52          {
-  53   1          uchar i, dat = 0;
-  54   1          for (i = 0; i < 8; i++) {
-C51 COMPILER V9.60.7.0   DS18B20                                                           06/27/2026 18:19:37 PAGE 2   
+   8          
+   9          /* ===== 内部延时 ===== */
+  10          static void delay(uint n)
+  11          {
+  12   1          while (n--);
+  13   1      }
+  14          
+  15          static void delay10us(uchar n)
+  16          {
+  17   1          uchar i;
+  18   1          for (i = 0; i < n; i++) delay(18);
+  19   1      }
+  20          
+  21          /* ===== 1-Wire 复位 ===== */
+  22          static uchar owReset(void)
+  23          {
+  24   1          uchar presence;
+  25   1          DQ = 0;
+  26   1          delay10us(50);
+  27   1          DQ = 1;
+  28   1          delay10us(5);
+  29   1          presence = DQ;
+  30   1          delay10us(50);
+  31   1          return presence;
+  32   1      }
+  33          
+  34          /* ===== 1-Wire 写字节 ===== */
+  35          static void owWrite(uchar dat)
+  36          {
+  37   1          uchar i;
+  38   1          for (i = 0; i < 8; i++) {
+  39   2              DQ = 0;
+  40   2              delay(2);
+  41   2              DQ = dat & 0x01;
+  42   2              delay10us(6);
+  43   2              DQ = 1;
+  44   2              dat >>= 1;
+  45   2              delay(2);
+  46   2          }
+  47   1      }
+  48          
+  49          /* ===== 1-Wire 读字节 ===== */
+  50          static uchar owRead(void)
+  51          {
+  52   1          uchar i, dat = 0;
+  53   1          for (i = 0; i < 8; i++) {
+  54   2              DQ = 0;
+C51 COMPILER V9.60.7.0   DS18B20                                                           06/29/2026 15:51:41 PAGE 2   
 
-  55   2              DQ = 0;
-  56   2              delay(2);
-  57   2              dat >>= 1;
-  58   2              DQ = 1;
-  59   2              delay(2);
-  60   2              if (DQ) dat |= 0x80;
-  61   2              delay10us(5);
-  62   2          }
-  63   1          return dat;
-  64   1      }
-  65          
-  66          /* ===== API ===== */
-  67          
-  68          void ds18b20Init(void)
-  69          {
-  70   1          DQ = 1;
-  71   1      }
-  72          
-  73          void ds18b20Start(void)
-  74          {
-  75   1          owReset();
-  76   1          owWrite(0xCC);
-  77   1          owWrite(0x44);
-  78   1      }
-  79          
-  80          uint ds18b20Read(void)
-  81          {
-  82   1          uchar lo, hi;
-  83   1          uint raw16;
-  84   1      
-  85   1          owReset();
-  86   1          owWrite(0xCC);
-  87   1          owWrite(0xBE);
-  88   1      
-  89   1          lo = owRead();
-  90   1          hi = owRead();
-  91   1      
-  92   1          raw16 = ((uint)hi << 8) | lo;
-  93   1      
-  94   1          return (uint)((raw16 * 100UL) / 16);
-  95   1      }
-  96          
-  97          static void waitMs(uint ms)
-  98          {
-  99   1          uchar j;
- 100   1          while (ms--) {
- 101   2              for (j = 0; j < 250; j++);
- 102   2          }
- 103   1      }
- 104          
- 105          uint ds18b20ReadTemp(void)
- 106          {
- 107   1          ds18b20Start();
- 108   1          waitMs(750);
- 109   1          return ds18b20Read();
- 110   1      }
+  55   2              delay(2);
+  56   2              dat >>= 1;
+  57   2              DQ = 1;
+  58   2              delay(2);
+  59   2              if (DQ) dat |= 0x80;
+  60   2              delay10us(5);
+  61   2          }
+  62   1          return dat;
+  63   1      }
+  64          
+  65          /* ===== API ===== */
+  66          
+  67          void ds18b20Init(void)
+  68          {
+  69   1          DQ = 1;
+  70   1      }
+  71          
+  72          void ds18b20Start(void)
+  73          {
+  74   1          owReset();
+  75   1          owWrite(0xCC);
+  76   1          owWrite(0x44);
+  77   1      }
+  78          
+  79          uint ds18b20Read(void)
+  80          {
+  81   1          uchar lo, hi;
+  82   1          uint raw16;
+  83   1      
+  84   1          owReset();
+  85   1          owWrite(0xCC);
+  86   1          owWrite(0xBE);
+  87   1      
+  88   1          lo = owRead();
+  89   1          hi = owRead();
+  90   1      
+  91   1          raw16 = ((uint)hi << 8) | lo;
+  92   1      
+  93   1          return (uint)((raw16 * 100UL) / 16);
+  94   1      }
+  95          
+  96          static void waitMs(uint ms)
+  97          {
+  98   1          uchar j;
+  99   1          while (ms--) {
+ 100   2              for (j = 0; j < 250; j++);
+ 101   2          }
+ 102   1      }
+ 103          
+ 104          uint ds18b20ReadTemp(void)
+ 105          {
+ 106   1          ds18b20Start();
+ 107   1          waitMs(750);
+ 108   1          return ds18b20Read();
+ 109   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    224    ----
+   CODE SIZE        =    220    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
-C51 COMPILER V9.60.7.0   DS18B20                                                           06/27/2026 18:19:37 PAGE 3   
-
    PDATA SIZE       =   ----    ----
+C51 COMPILER V9.60.7.0   DS18B20                                                           06/29/2026 15:51:41 PAGE 3   
+
    DATA SIZE        =   ----       1
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----

@@ -1,10 +1,10 @@
-".\Objects\ds18b20.obj",
 ".\Objects\main.obj",
-".\Objects\pcf8591.obj",
-".\Objects\ultra.obj",
 ".\Objects\oled7pin.obj",
 ".\Objects\buzzer.obj",
 ".\Objects\chart.obj",
-".\Objects\sysinit.obj" 
+".\Objects\sysinit.obj",
+".\Objects\ds18b20.obj",
+".\Objects\pcf8591.obj",
+".\Objects\ultrasonic.obj" 
 TO ".\Objects\SFU" 
 PRINT(".\Listings\SFU.m51") RAMSIZE(256) 

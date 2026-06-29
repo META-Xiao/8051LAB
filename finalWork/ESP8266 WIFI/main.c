@@ -3,9 +3,7 @@
    ESP8266: VCC-5V  GND-GND  RXD-P0.4  TXD-P0.5  RST-P0.7
    DS18B20: DQ-P0.2  VCC/GND-3.3V/GND
 */
-#include "sysinit.h"
-#include "esp8266.h"
-#include "ds18b20.h"
+#include "config.h"
 #include "stdio.h"
 
 #define WIFI_SSID      "YourWiFiName"

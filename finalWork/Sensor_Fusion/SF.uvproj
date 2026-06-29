@@ -412,21 +412,6 @@
               <FilePath>..\lib\oledfont.h</FilePath>
             </File>
             <File>
-              <FileName>ds18b20.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\ds18b20.c</FilePath>
-            </File>
-            <File>
-              <FileName>pcf8591.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\pcf8591.c</FilePath>
-            </File>
-            <File>
-              <FileName>ultra.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\ultra.c</FilePath>
-            </File>
-            <File>
               <FileName>buzzer.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\lib\buzzer.c</FilePath>
@@ -435,6 +420,21 @@
               <FileName>buzzer.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\lib\buzzer.h</FilePath>
+            </File>
+            <File>
+              <FileName>ds18b20.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\lib\ds18b20.c</FilePath>
+            </File>
+            <File>
+              <FileName>pcf8591.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\lib\pcf8591.c</FilePath>
+            </File>
+            <File>
+              <FileName>ultrasonic.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\lib\ultrasonic.c</FilePath>
             </File>
           </Files>
         </Group>

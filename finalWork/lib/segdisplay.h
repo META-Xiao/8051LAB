@@ -10,11 +10,14 @@
 #include "sysinit.h"
 
 /* ===== 硬件映射 ===== */
+#ifndef _SEG_PIN_DEFINED_
 #define SEG_PORT        P2
 sbit SEG_DIGIT0 = P1^0;
 sbit SEG_DIGIT1 = P1^1;
 sbit SEG_DIGIT2 = P1^2;
 sbit SEG_DIGIT3 = P1^3;
+#define _SEG_PIN_DEFINED_
+#endif
 #define SEG_DIGIT_COUNT 4
 
 /* ===== API ===== */

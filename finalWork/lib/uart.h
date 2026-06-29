@@ -15,7 +15,7 @@
 /* 默认初始化 (115200) */
 void uartInit(void);
 
-/* 指定波特率初始化，如 uartInitBaud(9600) */
+/* 指定波特率初始化 */
 void uartInitBaud(ulong baud);
 
 #endif

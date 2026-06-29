@@ -7,7 +7,7 @@
  *   3. 组合行列编码 → 查表得键号 1~16
  */
 
-#include "keyboard.h"
+#include "config.h"
 #include "intrins.h"
 
 /* ===== 4×4 键盘行列编码表 ===== */

@@ -1,4 +1,4 @@
-#include "buzzer.h"
+#include "config.h"
 #include "intrins.h"
 
 #define US_PER_LOOP   4

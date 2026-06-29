@@ -9,7 +9,7 @@
  * distance = ticks * 0.49 / 58.8 = ticks / 120
  */
 
-#include "ultrasonic.h"
+#include "config.h"
 #include "intrins.h"
 
 static void ultraDelayUs(uint us)

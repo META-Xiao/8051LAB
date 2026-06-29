@@ -6,8 +6,7 @@
  */
 #define CUBE_STATIC 0   /* 改0为动态旋转 */
 
-#include "sysinit.h"
-#include "oled7pin.h"
+#include "config.h"
 #include "cube_bmp.h"
 
 #if CUBE_STATIC

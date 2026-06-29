@@ -382,16 +382,6 @@
               <FilePath>.\main.c</FilePath>
             </File>
             <File>
-              <FileName>bluetooth.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\lib\bluetooth.c</FilePath>
-            </File>
-            <File>
-              <FileName>bluetooth.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\lib\bluetooth.h</FilePath>
-            </File>
-            <File>
               <FileName>sysinit.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\lib\sysinit.c</FilePath>

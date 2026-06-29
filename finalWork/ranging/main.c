@@ -1,8 +1,4 @@
-#include "sysinit.h"
-#include "uart.h"
-#include "segdisplay.h"
-#include "buzzer.h"
-#include "ultrasonic.h"
+#include "config.h"
 #include "stdio.h"
 
 void t2ISR() interrupt 5

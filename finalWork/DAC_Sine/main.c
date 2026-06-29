@@ -1,8 +1,6 @@
 /* 片内IDAC0 正弦波发生器
    P0.0 输出, 256点查表 0-4095 */
-#include "sysinit.h"
-#include "uart.h"
-#include "dac.h"
+#include "config.h"
 #include "stdio.h"
 
 void main(void)

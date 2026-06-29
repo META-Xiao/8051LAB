@@ -1,7 +1,7 @@
 /**
  * oled7pin.c — SSD1306 OLED 128×64 7pin SPI 驱动
  */
-#include "oled7pin.h"
+#include "config.h"
 #include "oledfont.h"
 
 /* ===== 内部辅助 ===== */

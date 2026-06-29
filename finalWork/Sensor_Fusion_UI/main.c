@@ -5,7 +5,6 @@
  * ADC 页面: 标题+数值一行 + 实时曲线图
  */
 #include "config.h"
-#include "chart.h"
 
 /* ===== 状态 ===== */
 #define STATE_BOOT  0

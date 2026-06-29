@@ -1,4 +1,4 @@
-#include "mpu6050.h"
+#include "config.h"
 #include <math.h>
 
 #define REG_SMPLRT_DIV   0x19

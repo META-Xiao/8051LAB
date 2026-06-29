@@ -14,11 +14,14 @@
 #define OLED_DATA 1
 
 /* ===== 引脚定义 ===== */
+#ifndef _OLED_PIN_DEFINED_
 sbit OLED_SCL = P0^0;
 sbit OLED_SDA = P0^1;
 sbit OLED_RST = P0^2;
 sbit OLED_DC  = P0^3;
 sbit OLED_CS  = P0^4;
+#define _OLED_PIN_DEFINED_
+#endif
 
 /* ===== 宏 ===== */
 #define OLED_SCL_CLR()  OLED_SCL = 0

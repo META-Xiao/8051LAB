@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   DAC                                                               06/26/2026 19:18:04 PAGE 1   
+C51 COMPILER V9.60.7.0   DAC                                                               06/29/2026 15:47:56 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE DAC
@@ -8,9 +8,9 @@ COMPILER INVOKED BY: D:\keilv5\C51\BIN\C51.EXE ..\lib\dac.c OPTIMIZE(8,SPEED) BR
 
 line level    source
 
-   1          /* C8051F410 片内12位 IDAC 驱动, 参考 4.3/4.4 验证代码
+   1          /* C8051F410 片内12位 IDAC 驱动
    2             正弦码表: x=linspace(0,2*pi,256); y=min(round(2048*(sin(x)+1)),4095) */
-   3          #include "dac.h"
+   3          #include "config.h"
    4          
    5          const uint code dacSineTable[DAC_SINE_POINTS] = {
    6              2048,2098,2148,2199,2249,2299,2349,2398,
@@ -62,7 +62,7 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-C51 COMPILER V9.60.7.0   DAC                                                               06/26/2026 19:18:04 PAGE 2   
+C51 COMPILER V9.60.7.0   DAC                                                               06/29/2026 15:47:56 PAGE 2   
 
    CODE SIZE        =     18    ----
    CONSTANT SIZE    =    512    ----

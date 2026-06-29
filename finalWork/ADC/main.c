@@ -1,9 +1,6 @@
 /* 片内ADC数字电压表
    模拟输入: P0.2, 量程 0-2.5V */
-#include "sysinit.h"
-#include "uart.h"
-#include "adc.h"
-#include "segdisplay.h"
+#include "config.h"
 #include "stdio.h"
 
 void main(void)

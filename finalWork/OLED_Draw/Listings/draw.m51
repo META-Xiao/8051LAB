@@ -1,4 +1,4 @@
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                    06/27/2026  15:25:58  PAGE 1
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                    06/29/2026  15:50:11  PAGE 1
 
 
 BL51 BANKED LINKER/LOCATER V6.22.4.0, INVOKED BY:
@@ -59,7 +59,7 @@ LINK MAP OF MODULE:  .\Objects\draw (MAIN)
             CODE    71EFH     001AH     UNIT         ?PR?CUBEDELAY?MAIN
             CODE    7209H     0011H     UNIT         ?PR?OLEDDISPLAYON?OLED7PIN
             CODE    721AH     0011H     UNIT         ?PR?OLEDDISPLAYOFF?OLED7PIN
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/27/2026  15:25:58  PAGE 2
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/29/2026  15:50:11  PAGE 2
 
 
             CODE    722BH     000FH     UNIT         ?PR?SYSINIT?SYSINIT
@@ -119,7 +119,7 @@ SEGMENT                               DATA_GROUP
 
 
 SYMBOL TABLE OF MODULE:  .\Objects\draw (MAIN)
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/27/2026  15:25:58  PAGE 3
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/29/2026  15:50:11  PAGE 3
 
 
 
@@ -170,29 +170,29 @@ SYMBOL TABLE OF MODULE:  .\Objects\draw (MAIN)
   -------         DO            
   D:0082H         SYMBOL        i
   -------         ENDDO         
-  C:71EFH         LINE#         23
+  C:71EFH         LINE#         21
+  C:71EFH         LINE#         22
   C:71EFH         LINE#         24
-  C:71EFH         LINE#         26
-  C:7208H         LINE#         27
+  C:7208H         LINE#         25
   -------         ENDPROC       CUBEDELAY
   -------         PROC          MAIN
   -------         DO            
   D:0043H         SYMBOL        f
   -------         ENDDO         
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/27/2026  15:25:58  PAGE 4
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/29/2026  15:50:11  PAGE 4
 
 
+  C:70CCH         LINE#         27
+  C:70CCH         LINE#         28
   C:70CCH         LINE#         29
-  C:70CCH         LINE#         30
-  C:70CCH         LINE#         31
-  C:70CFH         LINE#         32
-  C:70D2H         LINE#         33
-  C:70D5H         LINE#         35
-  C:70D5H         LINE#         36
-  C:70EFH         LINE#         37
-  C:70F2H         LINE#         38
-  C:70F4H         LINE#         39
-  C:70FEH         LINE#         40
+  C:70CFH         LINE#         30
+  C:70D2H         LINE#         31
+  C:70D5H         LINE#         33
+  C:70D5H         LINE#         34
+  C:70EFH         LINE#         35
+  C:70F2H         LINE#         36
+  C:70F4H         LINE#         37
+  C:70FEH         LINE#         38
   -------         ENDPROC       MAIN
   -------         ENDMOD        MAIN
 
@@ -222,7 +222,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\draw (MAIN)
   C:7095H         SYMBOL        _oledPow10
   C:7209H         PUBLIC        oledDisplayOn
   C:6F6AH         PUBLIC        _oledShowChar
-  C:7030H         SYMBOL        _oledWriteByte
+  C:7030H         PUBLIC        _oledWriteByte
   C:6003H         PUBLIC        f6x8
   C:71D4H         PUBLIC        _oledDelayMs
   B:0080H.1       PUBLIC        OLED_SDA
@@ -239,7 +239,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\draw (MAIN)
   C:71D4H         LINE#         10
   C:71D4H         LINE#         11
   C:71D4H         LINE#         13
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/27/2026  15:25:58  PAGE 5
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/29/2026  15:50:11  PAGE 5
 
 
   C:71DEH         LINE#         14
@@ -299,7 +299,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\draw (MAIN)
   -------         ENDPROC       OLEDDISPLAYON
   -------         PROC          OLEDDISPLAYOFF
   C:721AH         LINE#         63
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/27/2026  15:25:58  PAGE 6
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/29/2026  15:50:11  PAGE 6
 
 
   C:721AH         LINE#         64
@@ -359,7 +359,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\draw (MAIN)
   C:6E4EH         LINE#         115
   C:6E53H         LINE#         116
   C:6E58H         LINE#         117
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/27/2026  15:25:58  PAGE 7
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/29/2026  15:50:11  PAGE 7
 
 
   C:6E5DH         LINE#         119
@@ -419,7 +419,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\draw (MAIN)
   C:7147H         LINE#         158
   C:7149H         LINE#         159
   C:715DH         LINE#         160
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/27/2026  15:25:58  PAGE 8
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/29/2026  15:50:11  PAGE 8
 
 
   -------         ENDPROC       _OLEDSHOWCN
@@ -479,7 +479,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\draw (MAIN)
   C:6F50H         LINE#         197
   C:6F65H         LINE#         198
   C:6F69H         LINE#         199
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/27/2026  15:25:58  PAGE 9
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/29/2026  15:50:11  PAGE 9
 
 
   -------         ENDPROC       _OLEDSHOWNUM
@@ -508,6 +508,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\draw (MAIN)
 
   -------         MODULE        SYSINIT
   C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
   D:00E8H         PUBLIC        ADC0CN
   C:723AH         PUBLIC        sysPcaInit
   D:00A8H         PUBLIC        IE
@@ -538,10 +539,10 @@ SYMBOL TABLE OF MODULE:  .\Objects\draw (MAIN)
   -------         PROC          SYSTIMERINIT
   C:7241H         LINE#         9
   C:7241H         LINE#         10
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/29/2026  15:50:11  PAGE 10
+
+
   C:7241H         LINE#         11
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/27/2026  15:25:58  PAGE 10
-
-
   C:7244H         LINE#         12
   C:7247H         LINE#         13
   -------         ENDPROC       SYSTIMERINIT
@@ -598,8 +599,8 @@ SYMBOL TABLE OF MODULE:  .\Objects\draw (MAIN)
 
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_OLEDSHOWSTR?OLED7PIN
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/29/2026  15:50:11  PAGE 11
 
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/27/2026  15:25:58  PAGE 11
 
 
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS

@@ -1,8 +1,7 @@
 /**
  * chart.c — OLED 柱状曲线图 (帧缓冲+原子传输+跳帧)
  */
-#include "chart.h"
-#include "oled7pin.h"
+#include "config.h"
 
 #define BUF_SIZE 64
 #define MAX_COL  128
@@ -49,7 +48,7 @@ static void fbClear(void)
     for (i = 0; i < (uint)pages * MAX_COL; i++) fb[i] = 0;
 }
 
-/* 帧缓冲→OLED (关中断, 尽量原子) */
+/* 帧缓冲 */
 static void fbFlush(void)
 {
     uchar p, savedEA;

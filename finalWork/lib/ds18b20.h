@@ -23,10 +23,13 @@ void ds18b20Init(void);
 /* 启动温度转换，立即返回。调用后需等待 >=750ms 再读 */
 void ds18b20Start(void);
 
-/* 读取温度，返回 temp×100 (如 3206 = 32.06°C)，需在 ds18b20Start 后 >=750ms 调用 */
+/* 
+读取温度，返回 temp×100，需在 ds18b20Start 后 >=750ms 调用 
+eg 3206 = 32.06°C
+*/
 uint ds18b20Read(void);
 
-/* 一体式读取（阻塞约 800ms，内部调用 ds18b20Start + busy wait + ds18b20Read） */
+/* 一体式读取（阻塞约 800ms） */
 uint ds18b20ReadTemp(void);
 
 #endif

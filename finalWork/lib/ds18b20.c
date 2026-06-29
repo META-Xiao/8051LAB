@@ -4,7 +4,7 @@
  *   delay10us(n)   ≈ n * 10us (调用 delay(18))
  */
 
-#include "ds18b20.h"
+#include "config.h"
 
 /* ===== 内部延时 ===== */
 static void delay(uint n)

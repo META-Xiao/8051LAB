@@ -382,24 +382,9 @@
               <FilePath>.\config.h</FilePath>
             </File>
             <File>
-              <FileName>ds18b20.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\ds18b20.c</FilePath>
-            </File>
-            <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\main.c</FilePath>
-            </File>
-            <File>
-              <FileName>pcf8591.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\pcf8591.c</FilePath>
-            </File>
-            <File>
-              <FileName>ultra.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\ultra.c</FilePath>
             </File>
             <File>
               <FileName>ds18b20.h</FileName>
@@ -420,16 +405,6 @@
               <FileName>oledfont.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\lib\oledfont.h</FilePath>
-            </File>
-            <File>
-              <FileName>pcf8591.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\lib\pcf8591.h</FilePath>
-            </File>
-            <File>
-              <FileName>ultrasonic.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\lib\ultrasonic.h</FilePath>
             </File>
             <File>
               <FileName>buzzer.c</FileName>
@@ -460,6 +435,21 @@
               <FileName>sysinit.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\lib\sysinit.h</FilePath>
+            </File>
+            <File>
+              <FileName>ds18b20.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\lib\ds18b20.c</FilePath>
+            </File>
+            <File>
+              <FileName>pcf8591.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\lib\pcf8591.c</FilePath>
+            </File>
+            <File>
+              <FileName>ultrasonic.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\lib\ultrasonic.c</FilePath>
             </File>
           </Files>
         </Group>

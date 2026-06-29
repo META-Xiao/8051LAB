@@ -1,6 +1,5 @@
 /* ESP8266 WIFI 驱动: UART透传 + AT指令引擎 */
-#include "esp8266.h"
-#include "uart.h"
+#include "config.h"
 #include "stdio.h"
 #include "string.h"
 

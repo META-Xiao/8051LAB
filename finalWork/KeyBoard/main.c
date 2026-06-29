@@ -7,8 +7,7 @@
  *
  * 注意: 键盘搬到 P2 避免和 UART(P0) 冲突
  */
-#include "sysinit.h"
-#include "uart.h"
+#include "config.h"
 #include "stdio.h"
 
 /* 简单延时 */

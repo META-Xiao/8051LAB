@@ -1,5 +1,5 @@
 /* UART0 串口: 自动适配 T1M=0/1, 覆盖 1200~115200 */
-#include "uart.h"
+#include "config.h"
 #include "stdio.h"
 
 #define SYS_CLK  24500000UL

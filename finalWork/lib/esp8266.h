@@ -6,7 +6,10 @@
 
 #include "sysinit.h"
 
+#ifndef _ESP8266_PIN_DEFINED_
 sbit ESP8266_RST = P0^7;
+#define _ESP8266_PIN_DEFINED_
+#endif
 
 typedef struct {
     uchar *ssid;

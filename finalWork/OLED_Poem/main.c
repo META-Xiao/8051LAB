@@ -1,9 +1,8 @@
 /**
  * OLED_Poem — OLED显示唐诗 刘禹锡-酬乐天
  */
-#include "sysinit.h"
-#include "font_cn.h"      /* 先于 oled7pin.h, 定义 HZK_EXTERN_ONLY */
-#include "oled7pin.h"
+#include "config.h"
+#include "font_cn.h"      /* 先于 config.h 中 oled7pin.h, 定义 HZK_EXTERN_ONLY */
 
 enum {
     CN_CHEN=0, CN_ZHOU, CN_CE, CN_PAN, CN_QIAN, CN_FAN, CN_GUO, CN_DOU,

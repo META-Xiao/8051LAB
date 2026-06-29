@@ -26,3 +26,4 @@ sbit PCF_SDA = P1^0;
 #include "ds18b20.h"
 #include "pcf8591.h"
 #include "buzzer.h"
+#include "chart.h"

@@ -1,6 +1,4 @@
-#include "sysinit.h"
-#include "uart.h"
-#include "mpu6050.h"
+#include "config.h"
 #include "stdio.h"
 #include "math.h"
 

@@ -11,7 +11,10 @@
 
 #include "sysinit.h"
 
+#ifndef _BUZZER_PIN_DEFINED_
 sbit BUZZER_PIN = P1^7;
+#define _BUZZER_PIN_DEFINED_
+#endif
 
 /* ===== 阻塞 API（简单场景） ===== */
 void buzzerInit(void);

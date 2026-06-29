@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   MAIN                                                              06/27/2026 17:05:42 PAGE 1   
+C51 COMPILER V9.60.7.0   MAIN                                                              06/29/2026 15:49:26 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
@@ -62,7 +62,7 @@ line level    source
   52   1          buf[1] = '0' + (val / 100) % 10;
   53   1          buf[2] = '.';
   54   1          buf[3] = '0' + (val / 10) % 10;
-C51 COMPILER V9.60.7.0   MAIN                                                              06/27/2026 17:05:42 PAGE 2   
+C51 COMPILER V9.60.7.0   MAIN                                                              06/29/2026 15:49:26 PAGE 2   
 
   55   1          buf[4] = '0' + val % 10;
   56   1          buf[5] = 0;
@@ -126,7 +126,7 @@ line level    source
  114   3                  lastKey = 0;          /* 复位, 允许下次再按 */
  115   3              }
  116   2      
-C51 COMPILER V9.60.7.0   MAIN                                                              06/27/2026 17:05:42 PAGE 3   
+C51 COMPILER V9.60.7.0   MAIN                                                              06/29/2026 15:49:26 PAGE 3   
 
  117   2              switch (state) {
  118   3      
@@ -190,7 +190,7 @@ line level    source
  176   3                      temp = (uint)((ulong)temp * 9UL / 5UL) + 3200UL;
  177   3                  if (temp != lastTemp) { refresh = 1; lastTemp = temp; }
  178   3                  if (refresh) {
-C51 COMPILER V9.60.7.0   MAIN                                                              06/27/2026 17:05:42 PAGE 4   
+C51 COMPILER V9.60.7.0   MAIN                                                              06/29/2026 15:49:26 PAGE 4   
 
  179   4                      oledClear();
  180   4                      oledShowStr(0, 0, fahrMode ? "Temp(F):" : "Temp(C):");

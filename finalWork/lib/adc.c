@@ -1,5 +1,5 @@
 /* C8051F410 片内12位ADC驱动*/
-#include "adc.h"
+#include "config.h"
 
 void adcInit(void)
 {

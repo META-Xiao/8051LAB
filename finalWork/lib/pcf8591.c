@@ -1,5 +1,5 @@
 /* PCF8591 AD/DA 模块驱动, I2C 位操作 */
-#include "pcf8591.h"
+#include "config.h"
 
 #define PCF_ADDR_W 0x90
 #define PCF_ADDR_R 0x91

@@ -9,8 +9,11 @@
 
 #include "sysinit.h"
 
+#ifndef _MPU6050_PIN_DEFINED_
 sbit SDA = P0^2;
 sbit SCL = P0^3;
+#define _MPU6050_PIN_DEFINED_
+#endif
 
 /* 互补滤波参数 (按需修改) */
 #define FILTER_ALPHA    0.001

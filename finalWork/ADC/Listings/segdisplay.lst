@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   SEGDISPLAY                                                        06/26/2026 19:56:55 PAGE 1   
+C51 COMPILER V9.60.7.0   SEGDISPLAY                                                        06/29/2026 15:45:15 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE SEGDISPLAY
@@ -8,7 +8,7 @@ COMPILER INVOKED BY: D:\keilv5\C51\BIN\C51.EXE ..\lib\segdisplay.c OPTIMIZE(8,SP
 
 line level    source
 
-   1          #include "segdisplay.h"
+   1          #include "config.h"
    2          #include "intrins.h"
    3          
    4          static uchar code segTable[10] = {
@@ -62,7 +62,7 @@ line level    source
   52          
   53          void segShow(uint num)
   54          {
-C51 COMPILER V9.60.7.0   SEGDISPLAY                                                        06/26/2026 19:56:55 PAGE 2   
+C51 COMPILER V9.60.7.0   SEGDISPLAY                                                        06/29/2026 15:45:15 PAGE 2   
 
   55   1          uchar d[SEG_DIGIT_COUNT];
   56   1          uchar i, leading = 1;
@@ -126,7 +126,7 @@ line level    source
  114   1          if (dispBuf[scanIdx] != SEG_BLANK) {
  115   2              SEG_PORT = dispBuf[scanIdx];
  116   2              switch (scanIdx) {
-C51 COMPILER V9.60.7.0   SEGDISPLAY                                                        06/26/2026 19:56:55 PAGE 3   
+C51 COMPILER V9.60.7.0   SEGDISPLAY                                                        06/29/2026 15:45:15 PAGE 3   
 
  117   3                  case 0: SEG_DIGIT0 = 0; break;
  118   3                  case 1: SEG_DIGIT1 = 0; break;
@@ -157,7 +157,7 @@ line level    source
  143          {
  144   1          uchar j;
  145   1          while (ms--) {
- 146   2              for (j = 0; j < 250; j++) {
+ 146   2                for (j = 0; j < 250; j++) {
  147   3                  _nop_();
  148   3              }
  149   2          }

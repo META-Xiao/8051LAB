@@ -1,5 +1,4 @@
 ".\Objects\main.obj",
-".\Objects\bluetooth.obj",
 ".\Objects\sysinit.obj",
 ".\Objects\uart.obj",
 ".\Objects\mpu6050.obj" 

@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   ADC                                                               06/26/2026 19:56:55 PAGE 1   
+C51 COMPILER V9.60.7.0   ADC                                                               06/29/2026 15:45:15 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE ADC
@@ -9,7 +9,7 @@ COMPILER INVOKED BY: D:\keilv5\C51\BIN\C51.EXE ..\lib\adc.c OPTIMIZE(8,SPEED) BR
 line level    source
 
    1          /* C8051F410 片内12位ADC驱动*/
-   2          #include "adc.h"
+   2          #include "config.h"
    3          
    4          void adcInit(void)
    5          {

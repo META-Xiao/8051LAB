@@ -1,6 +1,6 @@
 /* C8051F410 片内12位 IDAC 驱动
    正弦码表: x=linspace(0,2*pi,256); y=min(round(2048*(sin(x)+1)),4095) */
-#include "dac.h"
+#include "config.h"
 
 const uint code dacSineTable[DAC_SINE_POINTS] = {
     2048,2098,2148,2199,2249,2299,2349,2398,

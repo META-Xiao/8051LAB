@@ -1,4 +1,4 @@
-#include "sysinit.h"
+#include "config.h"
 
 void sysPcaInit(void)
 {
