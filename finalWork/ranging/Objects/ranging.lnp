@@ -1,8 +1,0 @@
-".\Objects\main.obj",
-".\Objects\buzzer.obj",
-".\Objects\segdisplay.obj",
-".\Objects\sysinit.obj",
-".\Objects\uart.obj",
-".\Objects\ultrasonic.obj" 
-TO ".\Objects\ranging" 
-PRINT(".\Listings\ranging.m51") RAMSIZE(256) 

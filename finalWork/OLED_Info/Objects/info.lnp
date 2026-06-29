@@ -1,5 +1,0 @@
-".\Objects\main.obj",
-".\Objects\sysinit.obj",
-".\Objects\oled7pin.obj" 
-TO ".\Objects\info" 
-PRINT(".\Listings\info.m51") RAMSIZE(256) 

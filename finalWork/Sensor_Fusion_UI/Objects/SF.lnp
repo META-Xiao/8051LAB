@@ -1,9 +1,0 @@
-".\Objects\main.obj",
-".\Objects\sysinit.obj",
-".\Objects\oled7pin.obj",
-".\Objects\ds18b20.obj",
-".\Objects\pcf8591.obj",
-".\Objects\ultra.obj",
-".\Objects\buzzer.obj" 
-TO ".\Objects\SF" 
-PRINT(".\Listings\SF.m51") RAMSIZE(256) 

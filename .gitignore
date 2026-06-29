@@ -1,0 +1,16 @@
+# Keil C51 build artifacts
+**/Listings/
+**/Objects/
+
+# Keil user settings
+*.uvopt
+*.uvgui.*
+*.uvgui_*
+
+# Windows junk
+Thumbs.db
+Desktop.ini
+~$*.docx
+~$*.doc
+*.bmp
+*.png

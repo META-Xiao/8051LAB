@@ -4,19 +4,24 @@
 #include <stdarg.h>
 #include <string.h>
 
-unsigned char sendata[]={"0000,0000,0000\r\n"};
 unsigned char i;
 unsigned char j;
 unsigned char counter=0;
+
 sbit I2C_SCL = P0^3;
 sbit I2C_SDA = P0^2;
+sbit P10=P1^0;
+sbit P11=P1^1;
+sbit P12=P1^2;
+sbit P13=P1^3;
 
-int xdata AX, AY, AZ, GX, GY, GZ;
-float xdata AngleAccXZ=0, AngleGyroXZ=0, AngleXZ=0;
-float xdata AngleAccYZ=0, AngleGyroYZ=0, AngleYZ=0;
-float xdata AngleAccYX=0, AngleGyroYX=0, AngleYX=0;
-float xdata a, b, c;
-float xdata Alpha=0.001;
+unsigned char code led[]={0xC0,0xF9,0xA4,0xB0,0x99,0x92,0x82,0xF8,0x80,0x90,0x88,0x83,0xC6,0xA1,0x86,0x8E};
+
+unsigned char AD_CHANNEL;
+unsigned int D[4];
+
+float xdata temp;
+int xdata temp1;
 
 void PCA_Init()
 {
@@ -46,6 +51,8 @@ void Port_IO_Init()
 {
     XBR0      = 0x01;
     XBR1      = 0x40;
+		P1MDOUT |= 0x0F;
+	  P1MDOUT |= (1<<7);
 }
 
 void Oscillator_Init()
@@ -66,6 +73,11 @@ void Init_Device(void)
     Port_IO_Init();
     Oscillator_Init();
     Interrupts_Init();
+}
+
+void delay(int n)
+{
+	while(n--);
 }
 
 //I2C??
@@ -154,90 +166,31 @@ unsigned char I2C_ReceiveAck(void)
     return ack;
 }
 
-#define MPU6050_SMPLRT_DIV      0x19
-#define MPU6050_CONFIG          0x1A
-#define MPU6050_GYRO_CONFIG     0x1B
-#define MPU6050_ACCEL_CONFIG    0x1C
-#define MPU6050_ACCEL_XOUT_H    0x3B
-#define MPU6050_ACCEL_XOUT_L    0x3C
-#define MPU6050_ACCEL_YOUT_H    0x3D
-#define MPU6050_ACCEL_YOUT_L    0x3E
-#define MPU6050_ACCEL_ZOUT_H    0x3F
-#define MPU6050_ACCEL_ZOUT_L    0x40
-#define MPU6050_TEMP_OUT_H      0x41
-#define MPU6050_TEMP_OUT_L      0x42
-#define MPU6050_GYRO_XOUT_H     0x43
-#define MPU6050_GYRO_XOUT_L     0x44
-#define MPU6050_GYRO_YOUT_H     0x45
-#define MPU6050_GYRO_YOUT_L     0x46
-#define MPU6050_GYRO_ZOUT_H     0x47
-#define MPU6050_GYRO_ZOUT_L     0x48
-#define MPU6050_PWR_MGMT_1      0x6B
-#define MPU6050_PWR_MGMT_2      0x6C
-#define MPU6050_WHO_AM_I        0x75
-#define MPU6050_ADDRESS         0xD0
-
-void MPU6050_WriteReg(unsigned char RegAddress, unsigned char Data)
+//FCP8591
+bit ISendByte(unsigned char sla,unsigned char c)
 {
-    I2C_Start();
-    I2C_SendByte(MPU6050_ADDRESS);
-    I2C_ReceiveAck();
-    I2C_SendByte(RegAddress);
-    I2C_ReceiveAck();
-    I2C_SendByte(Data);
-    I2C_ReceiveAck();
-    I2C_Stop();
+   I2C_Start();  
+   I2C_SendByte(sla);          
+   I2C_ReceiveAck();
+   I2C_SendByte(c);             
+   I2C_ReceiveAck();
+   I2C_Stop();          
+   return(1);
 }
 
-void MPU6050_ReadRegs(unsigned char RegAddress, unsigned char *DataArray, unsigned char Count)
-{
-    unsigned char i;
-
-    I2C_Start();
-    I2C_SendByte(MPU6050_ADDRESS);
-    I2C_ReceiveAck();
-    I2C_SendByte(RegAddress);
-    I2C_ReceiveAck();
-
-    I2C_Start();
-    I2C_SendByte(MPU6050_ADDRESS | 0x01);
-    I2C_ReceiveAck();
-    for (i = 0; i < Count; i++) {
-        DataArray[i] = I2C_ReceiveByte();
-        if (i < Count - 1) {
-            I2C_SendAck(0);
-        } else {
-            I2C_SendAck(1);
-        }
-    }
-    I2C_Stop();
+unsigned char IRcvByte(unsigned char sla)
+{  
+	unsigned char c;
+  I2C_Start();       
+  I2C_SendByte(sla+1);
+  I2C_ReceiveAck();
+  c=I2C_ReceiveByte();      
+  I2C_SendAck(1);         
+  I2C_Stop();        
+  return(c);
 }
 
-void MPU6050_Init(void)
-{
-    I2C_Init();
-    MPU6050_WriteReg(MPU6050_PWR_MGMT_1, 0x01);
-    MPU6050_WriteReg(MPU6050_PWR_MGMT_2, 0x00);
-    MPU6050_WriteReg(MPU6050_SMPLRT_DIV, 0x09);
-    MPU6050_WriteReg(MPU6050_CONFIG, 0x06);
-    MPU6050_WriteReg(MPU6050_GYRO_CONFIG, 0x18);
-    MPU6050_WriteReg(MPU6050_ACCEL_CONFIG, 0x18);
-}
-
-void MPU6050_GetData(int *AccX, int *AccY, int *AccZ, int *GyroX, int *GyroY, int *GyroZ)
-{
-    static xdata unsigned char Data[14];
-
-    MPU6050_ReadRegs(MPU6050_ACCEL_XOUT_H, Data, 14);
-
-    *AccX  = ((int)Data[0]  << 8) | Data[1];
-    *AccY  = ((int)Data[2]  << 8) | Data[3];
-    *AccZ  = ((int)Data[4]  << 8) | Data[5];
-    *GyroX = ((int)Data[8]  << 8) | Data[9];
-    *GyroY = ((int)Data[10] << 8) | Data[11];
-    *GyroZ = ((int)Data[12] << 8) | Data[13];
-}
-
+//????
 void Serial_SendString(char *String)
 {
 	for (j = 0; String[j] != '\0'; j++)
@@ -261,38 +214,59 @@ void Serial_Printf(char *format, ...)
 void main()
 {
    Init_Device();
-   MPU6050_Init();
+	 I2C_Init();
 	
    while(1)
    {
-	   Serial_Printf("%d,%d,%d\r\n",(int)a,(int)b,(int)c);
+		 int x=50;
+			switch(AD_CHANNEL)
+      {
+        case 0: ISendByte(0x90,0x41);
+                D[0]=IRcvByte(0x90)*2;
+		   	   break;  
+	    
+	      case 1: ISendByte(0x90,0x42);
+                D[1]=IRcvByte(0x90)*2; 
+		     	 break;  
+	      
+	      case 2: ISendByte(0x90,0x43);
+                D[2]=IRcvByte(0x90)*2;  
+		     	 break;  
+	      
+	      case 3: ISendByte(0x90,0x40);
+                D[3]=IRcvByte(0x90)*2; 
+		     	 break;  
+			}
+
+      if(++AD_CHANNEL>4) AD_CHANNEL=0;
+		  
+			temp=D[1] * 5.00f / 510 ;
+			Serial_Printf("%f\r\n", temp);
+			
+			temp1=temp * 1000;
+			while(x--)
+			{
+				P10=0;P11=1;P12=1;P13=1;
+				P2=led[temp1/1000] & 0x7F;
+				delay(3000);
+	
+				P10=1;P11=0;P12=1;P13=1;
+				P2=led[(temp1/100)%10];
+				delay(3000);
+	
+				P10=1;P11=1;P12=0;P13=1;
+				P2=led[(temp1/10)%10];
+				delay(3000);
+	
+				P10=1;P11=1;P12=1;P13=0;
+				P2=led[temp1%10];
+				delay(3000);
+			}
    }
 }
 
 void t2int02() interrupt 5
 {
 	TF2H =0;
-	
-	MPU6050_GetData(&AX, &AY, &AZ, &GX, &GY, &GZ);
-	
-	GX += 19;
-	GY += 43;
-	GZ += 13;
-
-	AngleAccXZ  = -atan2(AX, AZ) / 3.1415926 * 180.0;
-	AngleGyroXZ = AngleXZ + (float)GY / 32768.0 * 2000.0 * 0.025;
-	AngleXZ     = (Alpha * AngleAccXZ) + ((1.0 - Alpha) * AngleGyroXZ);
-
-	AngleAccYZ  = -atan2(AY, AZ) / 3.1415926 * 180.0;
-	AngleGyroYZ = AngleYZ + (float)GX / 32768.0 * 2000.0 * 0.025;
-	AngleYZ     = (Alpha * AngleAccYZ) + ((1.0 - Alpha) * AngleGyroYZ);
-
-	AngleAccYX  = -atan2(AY, AX) / 3.1415926 * 180.0;
-	AngleGyroYX = AngleYX + (float)GZ / 32768.0 * 2000.0 * 0.025;
-	AngleYX     = (Alpha * AngleAccYX) + ((1.0 - Alpha) * AngleGyroYX);	
-		
-	a = AngleXZ;
-	b = AngleYZ;
-	c = AngleGyroYX;
 }
 

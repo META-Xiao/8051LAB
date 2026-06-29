@@ -1,7 +1,0 @@
-".\Objects\main.obj",
-".\Objects\keyboard.obj",
-".\Objects\segdisplay.obj",
-".\Objects\sysinit.obj",
-".\Objects\uart.obj" 
-TO ".\Objects\keys" 
-PRINT(".\Listings\keys.m51") RAMSIZE(256) 

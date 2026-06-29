@@ -1,7 +1,0 @@
-".\Objects\main.obj",
-".\Objects\adc.obj",
-".\Objects\segdisplay.obj",
-".\Objects\sysinit.obj",
-".\Objects\uart.obj" 
-TO ".\Objects\ADC" 
-PRINT(".\Listings\ADC.m51") RAMSIZE(256) 
