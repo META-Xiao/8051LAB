@@ -182,11 +182,13 @@ def draw_rom_ivt():
                     fontweight="bold", zorder=5)
 
         # "LJMP (3B)" marker BELOW the first 3 cells — never covers addresses
-        ljmp_x = CELL_X + 6 + 0.44   # center of byte_off=1 cell
-        ljmp_y = y_base - 0.7 - 0.18  # just below the cell row
-        ax.text(ljmp_x, ljmp_y, "LJMP\n(3B)", ha="center", va="top",
-                fontsize=5.5, fontfamily="monospace", color="#E53935", fontweight="bold",
-                zorder=5)
+        # Skip for the last vector (Timer 2) to avoid overlap with user code area
+        if i < len(vectors) - 1:
+            ljmp_x = CELL_X + 6 + 0.44   # center of byte_off=1 cell
+            ljmp_y = y_base - 0.7 - 0.18  # just below the cell row
+            ax.text(ljmp_x, ljmp_y, "LJMP\n(3B)", ha="center", va="top",
+                    fontsize=5.5, fontfamily="monospace", color="#E53935", fontweight="bold",
+                    zorder=5)
 
         # Label — right-aligned at LABEL_X, text extends LEFT, never touches cells
         ax.text(LABEL_X, y_base - 0.26, label, ha="right", va="center",
@@ -552,8 +554,8 @@ def draw_timer_modes():
          "Most common\nPrecise timing\nManual reload needed"),
         ("Mode 2: 8-bit Auto-Reload", "THx\n(Reload Value)", "TLx (8-bit Counter)\nOverflow->Reload", "#BBDEFB",
          "UART Baud Rate Gen.\nAuto-reload from THx\nNo software reload"),
-        ("Mode 3: Split Timer (T0 only)", "TH0 (8-bit)\nIndependent Timer 1", "TL0 (8-bit)\nIndependent Timer 2", "#FFF9C4",
-         "T0 splits into two\n8-bit timers\nT1 stops if used"),
+        ("Mode 3: Split Timer (T0 only)", "TH0 (8-bit)\nUses TR1 / TF1", "TL0 (8-bit)\nUses TR0 / TF0", "#FFF9C4",
+         "T0 splits into two\n8-bit timers\nT1 loses int. flags"),
     ]
 
     for ax_i, (title, hi, lo, color, note) in zip(axes, modes):
