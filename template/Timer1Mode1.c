@@ -11,6 +11,11 @@ uint16 load;
 // 最大65.5ms
 bool delay(uint16 ms)
 {
+    // t0=12/fosc
+    // 这里以us为单位fosc需要除以1e6
+    // t0=12/fosc*1e6=12*1e6/fosc
+    // cnt=T/t0
+    // 可以求出cnt=T*(fosc/(1e6*12) )
     uint16 time=ms*1000;
     uint16 cnt=time*(fosc/1000000UL)/12;
     load=65536UL-cnt;
