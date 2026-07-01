@@ -437,6 +437,20 @@ def gen_all_sfr_charts():
                   "SCON — Serial Port Control Register  (0x98, Bit-Addressable)",
                   "scon_register.png")
 
+    pcon_bits = [
+        {"name": "SMOD","on_label": "Baud Rate\nx2 (doubled)",   "off_label": "Baud Rate\nx1 (normal)"},
+        {"name": "—",   "is_reserved": True},
+        {"name": "—",   "is_reserved": True},
+        {"name": "—",   "is_reserved": True},
+        {"name": "GF1", "on_label": "General\nFlag 1",           "off_label": "Flag 1\ncleared"},
+        {"name": "GF0", "on_label": "General\nFlag 0",           "off_label": "Flag 0\ncleared"},
+        {"name": "PD",  "on_label": "Power-Down\nMode (idle=0)", "off_label": "Normal\nOperation"},
+        {"name": "IDL", "on_label": "Idle Mode\n(cpu stopped)",  "off_label": "Normal\nOperation"},
+    ]
+    draw_sfr_bits("PCON", "0x87", pcon_bits,
+                  "PCON — Power Control Register  (0x87, NOT Bit-Addressable)",
+                  "pcon_register.png")
+
 
 # ═══════════════════════════════════════════════════════════
 #  5. SFR Map (80H–FFH)
@@ -590,12 +604,12 @@ def draw_interrupt_priority():
             color="#263238", zorder=10)
 
     intrs = [
-        ("1 (Highest)", "INT0", "0x0003", "P3.2 — External Interrupt 0", "#FF5252"),
-        ("2", "Timer 0", "0x000B", "TF0 — Timer 0 Overflow", "#FF7043"),
-        ("3", "INT1", "0x0013", "P3.3 — External Interrupt 1", "#FFA726"),
-        ("4", "Timer 1", "0x001B", "TF1 — Timer 1 Overflow", "#66BB6A"),
-        ("5", "UART", "0x0023", "TI / RI — Serial Port", "#42A5F5"),
-        ("6 (Lowest)", "Timer 2", "0x002B", "TF2 / EXF2 (8052 only)", "#AB47BC"),
+        ("0 Highest", "INT0", "0x0003", "P3.2 — External Interrupt 0", "#FF5252"),
+        ("1", "Timer 0", "0x000B", "TF0 — Timer 0 Overflow", "#FF7043"),
+        ("2", "INT1", "0x0013", "P3.3 — External Interrupt 1", "#FFA726"),
+        ("3", "Timer 1", "0x001B", "TF1 — Timer 1 Overflow", "#66BB6A"),
+        ("4", "UART", "0x0023", "TI / RI — Serial Port", "#42A5F5"),
+        ("5 Lowest", "Timer 2", "0x002B", "TF2 / EXF2 (8052 only)", "#AB47BC"),
     ]
 
     for i, (pri, name, vector, desc, color) in enumerate(intrs):
@@ -703,10 +717,10 @@ def main():
     files.append(draw_bit_addressable())
     print("  [4] SFR map...")
     files.append(draw_sfr_map())
-    print("  [5] SFR bit diagrams (IE, IP, TCON, TMOD, SCON)...")
+    print("  [5] SFR bit diagrams (IE, IP, TCON, TMOD, SCON, PCON)...")
     gen_all_sfr_charts()
     for n in ["ie_register.png","ip_register.png","tcon_register.png",
-              "tmod_register.png","scon_register.png"]:
+              "tmod_register.png","scon_register.png","pcon_register.png"]:
         files.append(os.path.join(OUT_DIR, n))
     print("  [6] Timer modes...")
     files.append(draw_timer_modes())
