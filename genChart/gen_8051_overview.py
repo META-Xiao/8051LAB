@@ -216,7 +216,7 @@ def draw_overview():
         else:
             for b in range(8):
                 bx = x_bits + b * pitch
-                label = bits[7 - b]
+                label = bits[b]
                 if label in ("—", ""):
                     cc, tc, fw, fs = C_RESV, "#B0BEC5", "normal", 6
                 elif addr >= 0xC8:
@@ -234,9 +234,9 @@ def draw_overview():
                         fontsize=fs, fontfamily="monospace", color=tc, fontweight=fw)
 
                 # Bit address below
-                if bit_addrs is not None and bit_addrs[7 - b] is not None:
+                if bit_addrs is not None and bit_addrs[b] is not None:
                     ax.text(bx + bit_w/2, byte_cy - 0.45,
-                            f"{bit_addrs[7-b]:02X}H", ha="center", va="center",
+                            f"{bit_addrs[b]:02X}H", ha="center", va="center",
                             fontsize=4.3, fontfamily="monospace", color=C_BITNUM)
 
         # Reset value
