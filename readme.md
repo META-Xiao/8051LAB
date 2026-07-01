@@ -187,4 +187,4 @@ template/
                        START/STOP/收发字节/ACK，含5μs延时计算
 ```
 
-再次安利一个很好的网站[JunctionByte的个人技术博客](https://junctionbyte.com/category/learn/)，里面有很多嵌入式的教程，配图也很不错，非常适合初学者上手辅导。
+再次安利一个很好的网站[JunctionByte的博客](https://junctionbyte.com/category/learn/)，里面有很多嵌入式的教程，配图也很不错，非常适合初学者上手辅导。

@@ -87,4 +87,4 @@ I2C的具体教程推荐阅读[8051 Microcontroller I2C Guide | 8051 I2C Driver 
 
 剩下这些通信我们考试不怎么考，所以这里就不写了，除非我哪天需要学到这些通信方法，再补上。
 
-这里安利一个很好的网站[JunctionByte的个人技术博客](https://junctionbyte.com/category/learn/)，里面有很多嵌入式的教程，配图也很不错，非常适合初学者上手辅导。
+这里安利一个很好的网站[JunctionByte](https://junctionbyte.com/category/learn/)，里面有很多嵌入式的教程，配图也很不错，非常适合初学者上手辅导。
