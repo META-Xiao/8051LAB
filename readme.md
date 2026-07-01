@@ -125,6 +125,35 @@ TI 和 RI 必须软件清零——硬件只置位不清零。
 SCON = 0x50;  // 模式1 (8位UART), REN=1  标准初始化
 ```
 
+
+### PCON 电源控制寄存器
+
+![PCON](charts/pcon_register.png)
+
+地址 0x87，**不可位寻址**，必须整字节写入。控制串口波特率加倍、两个通用标志位、以及两种低功耗模式。
+
+| Bit | 名称 | 功能 |
+|:---:|:---|:---|
+| 7 | **SMOD** | 串口波特率倍速：1=加倍，0=正常（见下方波特率公式） |
+| 6–4 | — | 保留，未使用 |
+| 3 | **GF1** | 通用标志位 1，可作软件标志 |
+| 2 | **GF0** | 通用标志位 0，可作软件标志 |
+| 1 | **PD** | 掉电模式：1=进入（振荡器停振，仅复位可唤醒） |
+| 0 | **IDL** | 空闲模式：1=进入（CPU 停，定时器/串口/中断继续运行；任意中断或复位唤醒） |
+
+> PD 和 IDL 同时置 1 时 PD 优先生效。进入低功耗模式前建议先置位 EA 确保中断可唤醒。
+
+```c
+PCON = 0x80;  // SMOD=1  波特率加倍（UART 高速）
+PCON = 0x00;  // SMOD=0  波特率正常，正常运行
+PCON = 0x01;  // IDL=1   进入空闲模式（等待中断唤醒）
+PCON = 0x02;  // PD=1    进入掉电模式（仅复位唤醒）
+PCON = 0x08;  // GF1=1   置位通用标志 1
+```
+
+SMOD 直接关联下方波特率公式中的 $2^{SMOD}$  因子  
+SMOD=0 时分母系数为 384，SMOD=1 时系数为 192，波特率翻倍。
+
 ### Keil C51 存储器类型
 
 ![Memory Types](charts/memory_types.png)
@@ -135,3 +164,30 @@ SCON = 0x50;  // 模式1 (8位UART), REN=1  标准初始化
 
 所有模板使用标准 8051 SFR 名称。修改 `fosc` 匹配实际晶振频率。
 
+UART的具体教程推荐阅读[8051 Microcontroller UART (Serial Communication) | Everything You Need to Know](https://junctionbyte.com/8051-microcontroller-uart/)
+
+值得注意的是，只要UART配置好了，keil自动重载了`printf`,`scanf`,`getchar`函数，因此不需要手动重载。
+
+| 函数 | 方向 | 底层调用 |
+| :---: | :---: | :---: |
+| `printf` | 串口->发 | `putchar()` |
+| `scanf` | 串口->收 | `_getkey()` |
+| `getchar` | 串口->收 | `_getkey()` |
+
+波特率计算公式，这里以T1M2（自动重装载）为例
+
+$$
+\text{Baud} = \frac{2^{SMOD}}{32} \cdot \frac{\text{FOSC}}{12 \cdot (256-TH1)}
+$$
+
+SMOD=0：
+
+$$
+\text{Baud} = \frac{\text{FOSC}}{12 \cdot 32 \cdot (256-TH1)} = \frac{\text{FOSC}}{384 \cdot (256-TH1)}
+$$
+
+SMOD=1，波特率加倍：
+
+$$
+\text{Baud} =  2 \frac{\text{FOSC}}{12 \cdot 32 \cdot (256-TH1)}  = \frac{\text{FOSC}}{192 \cdot (256-TH1)}
+$$
