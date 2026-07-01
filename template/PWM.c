@@ -40,7 +40,7 @@ void init()
 void pwm_isr() interrupt 3
 {
     cnt++;
-    if(cnt>=1000) cnt=0;
+    if(cnt>=100) cnt=0;
 
     OUT=(cnt<pwm)? 1:0;
 }
