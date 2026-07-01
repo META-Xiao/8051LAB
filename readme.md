@@ -163,23 +163,26 @@ SMOD=0 时分母系数为 384，SMOD=1 时系数为 192，波特率翻倍。
 
 ## 代码模板
 
-这里常用通信协议的细节，可以[参考](serial.md)
+- 常用通信协议的细节，可以[参考](serial.md)
 
-这里不完全展开了，参考这个文件树查找即可：
+- 对于8051平台上的汇编，可以[参考](assembly.md)
+
+### 模板文件树
 
 ```
-../template/
-├── 8051.c
-├── 8051.h
-├── 8052.c
-├── 8052.h
-├── 8051_template.c
-├── 8052_template.c
-├── 8051_template.h
-├── 8052_template.h
-├── 8051_template_main.c
-├── 8052_template_main.c
-├── 8051_template_main.h
-├── 8052_template_main.h
-
+template/
+├── Timer0Mode2.c      Timer 0 模式2 (8位自动重装)
+│                      方波生成，查询/中断两种方式
+├── Timer1Mode1.c      Timer 1 模式1 (16位)
+│                      延时函数、中断方式、计数器模式
+├── Timer0Mode3.c      Timer 0 模式3 (双8位定时器)
+│                      TL0/TH0独立工作，常用于UART波特率发生器
+├── GATE.c             GATE门控 + INT0外部中断
+│                      脉冲宽度测量 (HC-SR04、红外NEC协议等)
+├── PWM.c              PWM输出 (定时器中断实现)
+│                      支持1ms/10ms/100ms周期，占空比0-100%
+├── UART.c             串口通信 (11.0592MHz, 9600波特率)
+│                      轮询/中断两种收发方式，printf/scanf重定向
+└── IIC.c              I2C通信协议软件实现
+                       START/STOP/收发字节/ACK，含5μs延时计算
 ```
