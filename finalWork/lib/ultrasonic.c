@@ -49,7 +49,7 @@ uint ultraRead(void)
     // 就是每次测量距离会一卡一卡的根源
     // 优化方案就是使用GATE模式+INT0/1中断方式测量
     while (!ECHO);
-    TR0 = 1; // 反复开关TR防止ECHO被其他定时器冲突
+    TR0 = 1; // 上升沿 开启定时器计时
     while (ECHO);
     TR0 = 0;
 
