@@ -2,7 +2,12 @@
 
 图表由 `gen_8051_charts.py` 和 `gen_8051_overview.py` 生成（需要 `matplotlib`）。
 
-**汇编指令复习**：请参考 [assembly.md](assembly.md)，包含常用汇编指令、寻址方式、代码模板和考试重点。
+
+## 参考文档
+
+- [assembly.md](docs/assembly.md) — 8051 汇编指令复习手册（寻址方式、指令表、代码模板、考试重点）
+- [serial.md](docs/serial.md) — 常用通信协议（UART、I2C、SPI）
+- [io_guide.md](docs/io_guide.md) — Keil C51 输入输出流指南（printf / scanf / getchar、格式符、注意事项）
 
 
 ## 寄存器图表
@@ -163,9 +168,9 @@ SMOD=0 时分母系数为 384，SMOD=1 时系数为 192，波特率翻倍。
 
 ## 代码模板
 
-- 常用通信协议的细节，可以[参考](serial.md)
+- 常用通信协议的细节，可以[参考](docs/serial.md)
 
-- 对于8051平台上的汇编，可以[参考](assembly.md)
+- 对于8051平台上的汇编，可以[参考](docs/assembly.md)
 
 ### 模板文件树
 
